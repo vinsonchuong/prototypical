@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+set -o errexit
+set -o nounset
+# set -o xtrace
+set -o pipefail
+
+SHOW_HELP=
+OUTPUT=${PWD}
+
+ARGS=$(getopt -o  ho: -l help,output: -- "${@}")
+eval set -- $ARGS
+while [[ ${#} -gt 0 ]]
+do
+	case "${1}" in
+		-h|--help)
+			SHOW_HELP=yes
+			shift
+			;;
+		-o|--output)
+			OUTPUT=${2}
+			shift 2
+			;;
+		--)
+			shift
+			break
+			;;
+	esac
+done
+
+if [[ $SHOW_HELP ]]
+then
+	cat '/usr/share/prototypical/help/prototypical'
+else
+	echo "$OUTPUT"
+fi
