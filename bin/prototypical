@@ -4,32 +4,18 @@ set -o nounset
 # set -o xtrace
 set -o pipefail
 
-SHOW_HELP=
-OUTPUT=${PWD}
+eval "$(parse-options help:h -- "$@")"
 
-ARGS=$(getopt -o  ho: -l help,output: -- "${@}")
-eval set -- $ARGS
-while [[ ${#} -gt 0 ]]
-do
-	case "${1}" in
-		-h|--help)
-			SHOW_HELP=yes
-			shift
-			;;
-		-o|--output)
-			OUTPUT=${2}
-			shift 2
-			;;
-		--)
-			shift
-			break
-			;;
-	esac
-done
+if [[ $# -ne 2 ]]
+then
+	help=yes
+fi
 
-if [[ $SHOW_HELP ]]
+if [[ $help ]]
 then
 	cat '/usr/share/prototypical/help/prototypical'
 else
-	echo "$OUTPUT"
+	recipe=$1
+	directory=$2
+	echo $recipe $directory
 fi
