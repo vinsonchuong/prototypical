@@ -1,0 +1,7 @@
+---
+language: bash
+install:
+  - git clone https://github.com/sstephenson/bats.git
+  - export PATH=$PWD/bin:$PWD/bats/bin:$PATH
+script:
+  - bats spec
