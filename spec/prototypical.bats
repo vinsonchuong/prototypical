@@ -2,6 +2,6 @@
 
 @test 'it echos the recipe and directory' {
   run prototypical rails foo
-  [[ $status -eq 0 ]]
+  [[ $status = 0 ]]
   [[ $output = 'rails foo' ]]
 }
