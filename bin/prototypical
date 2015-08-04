@@ -17,5 +17,12 @@ then
 else
 	recipe=$1
 	directory=$2
-	echo $recipe $directory
+
+	case "$recipe" in
+		rails)
+			;;
+		*)
+			echo 'Please specify a valid recipe.' >&2
+			exit 1
+	esac
 fi
