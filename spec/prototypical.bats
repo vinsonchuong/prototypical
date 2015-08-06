@@ -10,6 +10,7 @@ teardown() {
 
 @test 'it can bootstrap a Rails app' {
   run prototypical 'rails' '/tmp/awesome_blog'
+  echo "$output"
   [[ $status = 0 ]]
   [[ -d '/tmp/awesome_blog' ]]
   [[ -f '/tmp/awesome_blog/Gemfile' ]]
