@@ -16,13 +16,14 @@ then
 	cat '/usr/share/prototypical/help/prototypical'
 else
 	recipe=$1
-	directory=$2
+	path=$2
+	install=./lib/${recipe}/install
 
-	case "$recipe" in
-		rails)
-			;;
-		*)
-			echo 'Please specify a valid recipe.' >&2
-			exit 1
-	esac
+	if [[ -f $install ]]
+	then
+		"$install" "$path"
+	else
+		echo 'Please specify a valid recipe.' >&2
+		exit 1
+	fi
 fi
