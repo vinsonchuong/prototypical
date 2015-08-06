@@ -9,12 +9,15 @@ teardown() {
 }
 
 @test 'it can bootstrap a Rails app' {
+  skip
+
+  # stub something here
+
   run prototypical 'rails' '/tmp/awesome_blog'
   echo "$output"
   [[ $status = 0 ]]
   [[ -d '/tmp/awesome_blog' ]]
   [[ -f '/tmp/awesome_blog/Gemfile' ]]
-  skip
 
   cd '/tmp/awesome_blog'
   mkfifo server
