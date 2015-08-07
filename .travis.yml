@@ -1,5 +1,9 @@
 ---
 language: bash
+
+rvm:
+  - 2.2.2
+
 install:
   - git clone https://github.com/sstephenson/bats
   - git clone https://github.com/vinsonchuong/bash-common-parse-options
