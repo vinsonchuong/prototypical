@@ -1,33 +1,26 @@
 #!/usr/bin/env bats
 
-setup() {
-  echo
-}
-
 teardown() {
-  rm -rf '/tmp/awesome_blog'
+	rm -rf "${BATS_TEST_DIRNAME}/../lib/recipe"
 }
 
-@test 'it can bootstrap a Rails app' {
-  skip
+@test 'it installs the given recipe' {
+	local recipe_dir="${BATS_TEST_DIRNAME}/../lib/recipe"
+	mkdir "$recipe_dir"
+	cat <<-'EOF' > "${recipe_dir}/install"
+	echo "Recipe: $1"
+	EOF
+	chmod +x "${recipe_dir}/install"
 
-  # stub something here
+	run prototypical 'recipe' "${BATS_TMPDIR}/awesome_blog"
 
-  run prototypical 'rails' '/tmp/awesome_blog'
-  echo "$output"
-  [[ $status = 0 ]]
-  [[ -d '/tmp/awesome_blog' ]]
-  [[ -f '/tmp/awesome_blog/Gemfile' ]]
-
-  cd '/tmp/awesome_blog'
-  mkfifo server
-  ./bin/rails server &>server
-  cat server
+	[[ $status = 0 ]]
+	[[ $output = "Recipe: ${BATS_TMPDIR}/awesome_blog" ]]
 }
 
 @test 'it shows an error message when an invalid recipe is given' {
-  run prototypical 'invalid-recipe' '/tmp/awesome_blog'
-  [[ $status = 1 ]]
-  [[ $output = 'Please specify a valid recipe.' ]]
-  [[ ! -d '/tmp/awesome_blog' ]]
+	run prototypical 'invalid-recipe' "${BATS_TMPDIR}/awesome_blog"
+	[[ $status = 1 ]]
+	[[ $output = 'Please specify a valid recipe.' ]]
+	[[ ! -d '${BATS_TMPDIR}/awesome_blog' ]]
 }
