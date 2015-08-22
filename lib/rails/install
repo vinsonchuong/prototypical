@@ -5,6 +5,7 @@ set -o nounset
 set -o pipefail
 
 path=$1
+source "$(dirname "$0")/../versions"
 
 mkdir -p "$path"
 cd "$path"
@@ -13,10 +14,11 @@ if ! gem list bundler | grep -q bundler
 then
 	gem install bundler
 fi
+
 cat <<-RUBY > 'Gemfile'
 	source 'https://rubygems.org'
-	ruby '2.2.2'
-	gem 'rails', '~> 4.2.3'
+	ruby '${RUBY_VERSION}'
+	gem 'rails', '~> ${RAILS_VERSION}'
 	RUBY
 bundle install
 bundle exec rails new . \
