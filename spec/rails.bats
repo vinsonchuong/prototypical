@@ -9,10 +9,11 @@ teardown() {
 }
 
 @test 'it can bootstrap a Rails app' {
-  gem uninstall --executables bundler
+  run gem uninstall --executables bundler
+  echo "$output"
 
-  lib/rails/install '/tmp/awesome_blog'
-  skip
+  run lib/rails/install '/tmp/awesome_blog'
+  echo "$output"
   [[ $status = 0 ]]
   [[ $output = *'Successfully installed bundler'* ]]
   [[ -d '/tmp/awesome_blog' ]]
