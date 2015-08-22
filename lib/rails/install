@@ -10,11 +10,7 @@ source "$(dirname "$0")/../versions"
 mkdir -p "$path"
 cd "$path"
 
-if ! gem list bundler | grep -q bundler
-then
-	gem install bundler
-fi
-
+gem install bundler
 cat <<-RUBY > 'Gemfile'
 	source 'https://rubygems.org'
 	ruby '${RUBY_VERSION}'

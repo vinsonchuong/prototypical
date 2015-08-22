@@ -6,14 +6,11 @@ setup() {
 
 teardown() {
   rm -rf '/tmp/awesome_blog'
+  gem clean &>/dev/null
 }
 
 @test 'it can bootstrap a Rails app' {
-  run gem uninstall --executables bundler
-  echo "$output"
-
   run lib/rails/install '/tmp/awesome_blog'
-  echo "$output"
   [[ $status = 0 ]]
   [[ $output = *'Successfully installed bundler'* ]]
   [[ -d '/tmp/awesome_blog' ]]
