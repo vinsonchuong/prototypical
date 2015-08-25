@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
 export RUBY_VERSION='2.2.3'
-export RAILS_VERSION='4.2.3'
+export RAILS_VERSION='4.2.4'
 
 export NODE_VERSION='0.12.7'

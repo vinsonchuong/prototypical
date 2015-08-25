@@ -5,7 +5,8 @@ set -o nounset
 set -o pipefail
 
 path=$1
-source "$(dirname "$0")/../versions"
+lib=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
+source "${lib}/../versions"
 
 mkdir -p "$path"
 cd "$path"
@@ -18,5 +19,8 @@ cat <<-RUBY > 'Gemfile'
 	RUBY
 bundle install
 bundle exec rails new . \
-	--skip-gemfile \
-	--skip-bundle
+	--template="${lib}/template.rb" \
+	--skip-bundle \
+	--database='postgresql' \
+	--skip-test-unit \
+	--force

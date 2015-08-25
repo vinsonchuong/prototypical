@@ -17,7 +17,7 @@ then
 else
 	recipe=$1
 	path=$2
-	install=./lib/${recipe}/install
+	install=$(dirname "$0")/../lib/${recipe}/install
 
 	if [[ -f $install ]]
 	then
