@@ -19,7 +19,15 @@ setup() {
   run bin/rails runner 'puts Article.first.title'
   [[ $output = 'First Article' ]]
 
-  # Test puma
+  mkfifo server
+  bin/rails server > server &
+  while read line < server
+  do
+    if [[ $line = *'Listening on'* ]]
+    then
+      kill %%
+    fi
+  done
   # Exercise sass-rails with simple styling
   # Exercise jquery-rails with simple behavior
 
@@ -51,4 +59,3 @@ teardown() {
   dropdb --if-exists 'awesome_blog_development'
   dropdb --if-exists 'awesome_blog_test'
 }
-
