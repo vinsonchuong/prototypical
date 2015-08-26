@@ -42,7 +42,7 @@ group :test do
 end
 RUBY
 
-bundle 'update'
+bundle 'install --jobs 20 --retry 5'
 
 copy_file 'app/assets/stylesheets/application.css', 'app/assets/stylesheets/application.css.scss'
 remove_file 'app/assets/stylesheets/application.css'
