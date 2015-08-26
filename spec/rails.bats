@@ -1,64 +1,80 @@
 #!/usr/bin/env bats
 
 setup() {
-  export GEM_HOME='/tmp/awesome_blog/.gem'
+	export GEM_HOME='/tmp/awesome_blog/.gem'
 }
 
 @test 'it can bootstrap a Rails app' {
-  run prototypical rails '/tmp/awesome_blog'
-  [[ $status = 0 ]]
+	run prototypical rails '/tmp/awesome_blog'
+	[[ $status = 0 ]]
 
-  [[ $output = *'Successfully installed bundler'* ]]
+	[[ $output = *'Successfully installed bundler'* ]]
 
-  [[ -d '/tmp/awesome_blog' ]]
-  pushd '/tmp/awesome_blog' &>/dev/null
+	[[ -d '/tmp/awesome_blog' ]]
+	pushd '/tmp/awesome_blog' &>/dev/null
 
-  run bin/rails generate model article title:string
-  run bin/rake db:migrate
-  run bin/rails runner 'Article.create(title: "First Article")'
-  run bin/rails runner 'puts Article.first.title'
-  [[ $output = 'First Article' ]]
+	run bin/rails generate scaffold article title:string
+	run bin/rake db:migrate
+	run bin/rails runner 'Article.create(title: "First Article")'
+	run bin/rails runner 'puts Article.first.title'
+	[[ $output = 'First Article' ]]
 
-  mkfifo server
-  bin/rails server > server &
-  while read line < server
-  do
-    if [[ $line = *'Listening on'* ]]
-    then
-      break
-    fi
-  done
-  [[ $(curl 'http://localhost:3000' 2>/dev/null) = *'Welcome aboard'* ]]
-  kill %%
+	run bin/rails server --daemon
+	[[ $(curl 'http://localhost:3000/articles' 2>/dev/null) = *'Listing Articles'* ]]
 
-  # Exercise sass-rails with simple styling
-  # Exercise jquery-rails with simple behavior
+	mkdir '/tmp/awesome_blog/spec/features'
+	cat <<-'RUBY' > '/tmp/awesome_blog/spec/features/articles_spec.rb'
+	require 'rails_helper'
+
+	RSpec.describe 'Articles' do
+	  it 'can create and view an article' do
+	    visit articles_path
+	    click_on 'New Article'
+	    fill_in 'Title', with: 'My First Article'
+	    click_on 'Create Article'
+
+	    expect(page).to have_content('Article was successfully created.')
+	    expect(page).to have_content('Title: My First Article')
+
+	    click_on 'Back'
+
+	    expect(page.find('tbody tr:first-child')).to have_content('My First Article')
+	  end
+	end
+	RUBY
+
+	run bin/rspec
+	echo "$output"
+	[[ $output = *'32 examples, 0 failures, 17 pending'* ]]
 
   # Deploy to CF / Heroku
   # Test uglified code
   # Test .travis.yml
 
-  # Run RSpec
+	run bin/spring status
+	[[ $output = *'Spring is running:'* ]]
 
-  run bin/spring status
-  [[ $output = *'Spring is running:'* ]]
+	run git status
+	[[ $output = *'Initial commit'* ]]
 
-  run git status
-  [[ $output = *'Initial commit'* ]]
-
-  popd &>/dev/null
+	popd &>/dev/null
 }
 
 teardown() {
-  if [[ -d '/tmp/awesome_blog' ]]
-  then
-    pushd '/tmp/awesome_blog'
-    bin/spring stop
-    popd
-    rm -rf '/tmp/awesome_blog'
-  fi
+	if [[ -d '/tmp/awesome_blog' ]]
+	then
+		pushd '/tmp/awesome_blog'
+		bin/spring stop
+		if [[ -f 'tmp/pids/server.pid' ]]
+		then
+			kill "$(cat 'tmp/pids/server.pid')" || true
+		fi
 
-  gem clean &>/dev/null
-  dropdb --if-exists 'awesome_blog_development'
-  dropdb --if-exists 'awesome_blog_test'
+		popd
+		rm -rf '/tmp/awesome_blog'
+	fi
+
+	gem clean &>/dev/null
+	dropdb --if-exists 'awesome_blog_development'
+	dropdb --if-exists 'awesome_blog_test'
 }

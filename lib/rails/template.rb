@@ -78,6 +78,6 @@ YAML
 
 bundle 'binstubs rspec-core'
 bundle 'exec spring binstub --all'
-rake 'db:create db:migrate'
+rake 'db:create db:migrate db:test:prepare'
 
 git :init
