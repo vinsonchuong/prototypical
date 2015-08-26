@@ -25,9 +25,12 @@ setup() {
   do
     if [[ $line = *'Listening on'* ]]
     then
-      kill %%
+      break
     fi
   done
+  [[ $(curl 'http://localhost:3000' 2>/dev/null) = *'Welcome aboard'* ]]
+  kill %%
+
   # Exercise sass-rails with simple styling
   # Exercise jquery-rails with simple behavior
 
