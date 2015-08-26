@@ -35,10 +35,6 @@ setup() {
 
 	    expect(page).to have_content('Article was successfully created.')
 	    expect(page).to have_content('Title: My First Article')
-
-	    click_on 'Back'
-
-	    expect(page.find('tbody tr:first-child')).to have_content('My First Article')
 	  end
 	end
 	RUBY
