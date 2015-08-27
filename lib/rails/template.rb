@@ -42,7 +42,7 @@ group :test do
 end
 RUBY
 
-bundle 'install --jobs 20 --retry 5'
+bundle 'install --jobs 4 --retry 3'
 
 copy_file 'app/assets/stylesheets/application.css', 'app/assets/stylesheets/application.css.scss'
 remove_file 'app/assets/stylesheets/application.css'
@@ -74,6 +74,11 @@ file '.travis.yml', <<-YAML
 language: ruby
 rvm:
   - #{ENV['RUBY_VERSION']}
+
+bundler_args: --without development production --jobs 3 --retry 3
+cache: bundler
+before_script:
+  - rake db:test:prepare
 YAML
 
 bundle 'binstubs rspec-core'

@@ -17,7 +17,7 @@ cat <<-RUBY > 'Gemfile'
 	ruby '${RUBY_VERSION}'
 	gem 'rails', '~> ${RAILS_VERSION}'
 	RUBY
-bundle install --jobs 20 --retry 5
+bundle install --jobs 4 --retry 3
 bundle exec rails new . \
 	--template="${lib}/template.rb" \
 	--skip-bundle \

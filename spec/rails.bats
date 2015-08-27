@@ -43,10 +43,6 @@ setup() {
 	echo "$output"
 	[[ $output = *'32 examples, 0 failures, 17 pending'* ]]
 
-  # Deploy to CF / Heroku
-  # Test uglified code
-  # Test .travis.yml
-
 	run bin/spring status
 	[[ $output = *'Spring is running:'* ]]
 
