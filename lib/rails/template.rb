@@ -95,10 +95,10 @@ Travis CI Badge
 ## Section 2
 MARKDOWN
 
-file 'LICENSE', <<'TEXT'
+file 'LICENSE', <<TEXT
 The MIT License (MIT)
 
-Copyright (c) 2015 Vinson Chuong
+Copyright (c) #{Time.now.year} Vinson Chuong
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
