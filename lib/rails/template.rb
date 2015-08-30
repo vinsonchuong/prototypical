@@ -61,8 +61,8 @@ generate 'rspec:install'
 insert_into_file 'spec/rails_helper.rb', <<-RUBY, after: /^# Add additional.*\n/
 require 'capybara/rails'
 require 'capybara/poltergeist'
-Capybara.default_driver = :poltergeist
-#Capybara.default_driver = :selenium
+# Capybara.default_driver = :poltergeist
+Capybara.default_driver = :selenium
 RUBY
 
 comment_lines 'spec/rails_helper.rb', /use_transactional_fixtures/
@@ -76,6 +76,7 @@ RUBY
 
 gsub_file 'spec/spec_helper.rb', "=begin\n", ''
 gsub_file 'spec/spec_helper.rb', "=end\n", ''
+gsub_file 'spec/spec_helper.rb', '"spec/examples.txt"', %q['tmp/spec/examples.txt']
 
 file '.travis.yml', <<'YAML'
 ---
@@ -83,10 +84,16 @@ language: ruby
 rvm:
   - #{ENV['RUBY_VERSION']}
 
+before_install:
+  - export DISPLAY=:99.0
+  - sh -e /etc/init.d/xvfb start
+
 bundler_args: --without development production --jobs 3 --retry 3
-cache: bundler
+
 before_script:
   - rake db:test:prepare
+
+cache: bundler
 YAML
 
 bundle 'binstubs rspec-core'
@@ -148,4 +155,5 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 TEXT
 
+run 'spring stop'
 git 'init'
