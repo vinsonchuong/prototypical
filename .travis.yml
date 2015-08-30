@@ -1,6 +1,10 @@
 ---
 language: bash
 
+before_install:
+  - export DISPLAY=:99.0
+  - sh -e /etc/init.d/xvfb start
+
 install:
   - source "$PWD/lib/versions"
   - rvm use "$RUBY_VERSION" --install --binary
@@ -8,5 +12,6 @@ install:
   - git clone https://github.com/sstephenson/bats
   - git clone https://github.com/vinsonchuong/bash-common-parse-options
   - export PATH=$PWD/bin:$PWD/bats/bin:$PWD/bash-common-parse-options/bin:$PATH
+
 script:
   - bats spec
