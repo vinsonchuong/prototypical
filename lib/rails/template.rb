@@ -46,6 +46,7 @@ group :test do
   gem 'database_cleaner'
   gem 'launchy'
   gem 'poltergeist'
+  gem 'phantomjs', require: 'phantomjs/poltergeist'
   gem 'selenium-webdriver'
 end
 RUBY
@@ -112,7 +113,6 @@ The application requires the following external dependencies:
 * PostgreSQL
 * Ruby #{ENV['RUBY_VERSION']}
 * Bundler
-* PhantomJS
 
 The rest of the dependencies are handled through:
 ```bash
