@@ -21,6 +21,9 @@ gem 'rails', '#{ENV['RAILS_VERSION']}'
 gem 'pg'
 gem 'puma'
 
+gem 'bcrypt'
+gem 'jbuilder'
+
 gem 'sass-rails'
 gem 'jquery-rails'
 gem 'uglifier'
