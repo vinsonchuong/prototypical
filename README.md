@@ -1,4 +1,6 @@
 # prototypical
+[![Build Status](https://travis-ci.org/vinsonchuong/prototypical.svg?branch=master)](https://travis-ci.org/vinsonchuong/prototypical)
+
 A starting point for a project
 
 ## Installing
