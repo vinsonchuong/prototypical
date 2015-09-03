@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+set -o errexit
+set -o nounset
+# set -o xtrace
+set -o pipefail
+
+path=$1
+lib=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
+source "${lib}/../versions"
+
+mkdir -p "$path"
+cd "$path"
+
+npm init --yes
+echo '/node_modules/' >> '.gitignore'
+
+npm install --save-dev jspm
+node_modules/.bin/jspm init -y
+echo '/jspm_packages/' >> '.gitignore'
+
+npm install --save-dev http-server
+jq '.scripts.start = "http-server"' package.json | tee package.json
+
+tee index.html <<-HTML
+<!DOCTYPE html>
+<meta charset="UTF-8">
+<script src="jspm_packages/system.js"></script>
+<script src="config.js"></script>
+<script>System.import('index.js')</script>
+HTML
+
+tee index.js <<-HTML
+document.body.textContent = 'Hello World!';
+HTML
+
+git init
