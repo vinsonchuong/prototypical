@@ -19,7 +19,7 @@ node_modules/.bin/jspm init -y
 echo '/jspm_packages/' >> '.gitignore'
 
 npm install --save-dev http-server
-jq '.scripts.start = "http-server"' package.json | tee package.json
+cat package.json | jq '.scripts.start = "http-server"' | tee package.json
 
 tee index.html <<-HTML
 <!DOCTYPE html>
