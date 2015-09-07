@@ -17,7 +17,9 @@ then
 else
 	recipe=$1
 	path=$(readlink -f "$2")
-	install=$(dirname "$0")/../lib/${recipe}/install
+
+	bin_dir=$(readlink -f "$(dirname "${BASH_SOURCE[0]}")")
+	install=${bin_dir}/../lib/${recipe}/install
 
 	if [[ -f $install ]]
 	then

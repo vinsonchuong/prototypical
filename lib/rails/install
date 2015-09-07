@@ -5,7 +5,7 @@ set -o nounset
 set -o pipefail
 
 path=$1
-lib=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
+lib=$(dirname "$(readlink -f "$0")")
 source "${lib}/../versions"
 
 prototypical base "$path"
