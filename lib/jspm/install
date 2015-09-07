@@ -4,12 +4,7 @@ set -o nounset
 # set -o xtrace
 set -o pipefail
 
-path=$1
-lib=$(dirname "$(readlink -f "$0")")
-source "${lib}/../versions"
-
-prototypical base "$path"
-cd "$path"
+eval "$(prototypical base "$@")"
 
 npm init --yes
 echo '/node_modules/' >> '.gitignore'

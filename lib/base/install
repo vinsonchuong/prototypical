@@ -5,13 +5,17 @@ set -o nounset
 set -o pipefail
 
 path=$1
-lib=$(dirname "$(readlink -f "$0")")
-source "${lib}/../versions"
+lib=$(dirname "$(dirname "$(readlink -f "$0")")")
+source "${lib}/versions"
 
+echo "Creating prototypical project at ${path}" >&2
 mkdir -p "$path"
 cd "$path"
 
-tee LICENSE <<TEXT
+git init 1>&2
+
+echo 'Adding MIT License' >&2
+cat <<TEXT > LICENSE
 The MIT License (MIT)
 
 Copyright (c) $(date '+%Y') $(git config --get user.name)
@@ -35,4 +39,9 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 TEXT
 
-git init
+cat <<BASH
+$(cat "${lib}/versions")
+path=${path}
+lib=${lib}
+cd '${path}'
+BASH
