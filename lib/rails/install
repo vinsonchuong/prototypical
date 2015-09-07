@@ -8,7 +8,7 @@ path=$1
 lib=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 source "${lib}/../versions"
 
-mkdir -p "$path"
+prototypical base "$path"
 cd "$path"
 
 gem install bundler

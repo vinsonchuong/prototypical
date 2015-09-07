@@ -7,6 +7,12 @@
 	[[ -d '/tmp/awesome_blog' ]]
 	pushd '/tmp/awesome_blog' &>/dev/null
 
+  run cat '/tmp/awesome_blog/LICENSE'
+	[[ $output = *'The MIT License'* ]]
+
+	run git status
+	[[ $output = *'Initial commit'* ]]
+
 	npm start &> server &
   while true
   do
@@ -19,9 +25,6 @@
 
   run curl 'http://localhost:8080'
 	[[ $output = *'System.import'* ]]
-
-	run git status
-	[[ $output = *'Initial commit'* ]]
 
 	popd &>/dev/null
 }

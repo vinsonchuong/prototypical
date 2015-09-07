@@ -7,11 +7,16 @@ setup() {
 @test 'it can bootstrap a Rails app' {
 	run prototypical rails '/tmp/awesome_blog'
 	[[ $status = 0 ]]
-
 	[[ $output = *'Successfully installed bundler'* ]]
 
 	[[ -d '/tmp/awesome_blog' ]]
 	pushd '/tmp/awesome_blog' &>/dev/null
+
+  run cat 'LICENSE'
+	[[ $output = *'The MIT License'* ]]
+
+	run git status
+	[[ $output = *'Initial commit'* ]]
 
 	run bin/rails generate scaffold article title:string
 	run bin/rake db:migrate
@@ -45,9 +50,6 @@ setup() {
 
 	run bin/spring status
 	[[ $output = *'Spring is running:'* ]]
-
-	run git status
-	[[ $output = *'Initial commit'* ]]
 
 	popd &>/dev/null
 }

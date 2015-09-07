@@ -16,7 +16,7 @@ then
 	cat '/usr/share/prototypical/help/prototypical'
 else
 	recipe=$1
-	path=$2
+	path=$(realpath "$2")
 	install=$(dirname "$0")/../lib/${recipe}/install
 
 	if [[ -f $install ]]
