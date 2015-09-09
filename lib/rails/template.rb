@@ -4,10 +4,6 @@ def bundle(command)
   end
 end
 
-def project_name
-  File.basename(File.realpath(app_path))
-end
-
 file 'Gemfile', <<-RUBY
 source 'https://rubygems.org'
 
@@ -101,11 +97,9 @@ bundle 'exec spring binstub --all'
 rake 'db:create db:migrate db:test:prepare'
 
 remove_file 'README.rdoc'
-file 'README.md', <<MARKDOWN
-# #{project_name.titleize}
-[![Build Status](https://travis-ci.org/vinsonchuong/#{project_name}.svg?branch=master)](https://travis-ci.org/vinsonchuong/#{project_name})
-[![Dependency Status](https://gemnasium.com/vinsonchuong/#{project_name}.svg)](https://gemnasium.com/vinsonchuong/#{project_name})
-[![Code Climate](https://codeclimate.com/github/vinsonchuong/#{project_name}/badges/gpa.svg)](https://codeclimate.com/github/vinsonchuong/#{project_name})
+append_to_file 'README.md', <<MARKDOWN
+[![Dependency Status](https://gemnasium.com/#{ENV['github_username']}/#{ENV['project_dir']}.svg)](https://gemnasium.com/#{ENV['github_username']}/#{ENV['project_dir']})
+[![Code Climate](https://codeclimate.com/github/#{ENV['github_username']}/#{ENV['project_dir']}/badges/gpa.svg)](https://codeclimate.com/github/#{ENV['github_username']}/#{ENV['project_dir']})
 
 ## Development
 The application requires the following external dependencies:

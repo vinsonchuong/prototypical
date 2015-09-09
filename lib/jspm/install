@@ -6,6 +6,10 @@ set -o pipefail
 
 eval "$(prototypical base "$@")"
 
+cat <<MARKDOWN >> README.md
+[![Code Climate](https://codeclimate.com/github/${github_username}/${project_dir}/badges/gpa.svg)](https://codeclimate.com/github/${github_username}/${project_dir})
+MARKDOWN
+
 npm init --yes
 echo '/node_modules/' >> '.gitignore'
 

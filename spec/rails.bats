@@ -12,11 +12,17 @@ setup() {
 	[[ -d '/tmp/awesome_blog' ]]
 	pushd '/tmp/awesome_blog' &>/dev/null
 
+	run git status
+	[[ $output = *'Initial commit'* ]]
+
   run cat 'LICENSE'
 	[[ $output = *'The MIT License'* ]]
 
-	run git status
-	[[ $output = *'Initial commit'* ]]
+	run cat 'README.md'
+	[[ $output = *'# Awesome Blog'* ]]
+	[[ $output = *'Build Status'*'travis-ci.org/GITHUB_USERNAME/awesome_blog'* ]]
+	[[ $output = *'Dependency Status'*'gemnasium.com/GITHUB_USERNAME/awesome_blog'* ]]
+	[[ $output = *'Code Climate'*'codeclimate.com/github/GITHUB_USERNAME/awesome_blog'* ]]
 
 	run bin/rails generate scaffold article title:string
 	run bin/rake db:migrate

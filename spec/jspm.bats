@@ -7,11 +7,16 @@
 	[[ -d '/tmp/awesome_blog' ]]
 	pushd '/tmp/awesome_blog' &>/dev/null
 
-  run cat '/tmp/awesome_blog/LICENSE'
-	[[ $output = *'The MIT License'* ]]
-
 	run git status
 	[[ $output = *'Initial commit'* ]]
+
+  run cat 'LICENSE'
+	[[ $output = *'The MIT License'* ]]
+
+	run cat 'README.md'
+	[[ $output = *'# Awesome Blog'* ]]
+	[[ $output = *'Build Status'*'travis-ci.org/GITHUB_USERNAME/awesome_blog'* ]]
+	[[ $output = *'Code Climate'*'codeclimate.com/github/GITHUB_USERNAME/awesome_blog'* ]]
 
 	npm start &> server &
   while true
