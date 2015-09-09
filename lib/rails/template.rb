@@ -74,7 +74,7 @@ gsub_file 'spec/spec_helper.rb', "=begin\n", ''
 gsub_file 'spec/spec_helper.rb', "=end\n", ''
 gsub_file 'spec/spec_helper.rb', '"spec/examples.txt"', %q['tmp/spec/examples.txt']
 
-file '.travis.yml', <<'YAML'
+file '.travis.yml', <<YAML
 ---
 language: ruby
 rvm:
