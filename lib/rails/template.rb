@@ -1,3 +1,5 @@
+require 'yaml'
+
 def bundle(command)
   Bundler.with_clean_env do
     run "bundle #{command}"
@@ -74,23 +76,19 @@ gsub_file 'spec/spec_helper.rb', "=begin\n", ''
 gsub_file 'spec/spec_helper.rb', "=end\n", ''
 gsub_file 'spec/spec_helper.rb', '"spec/examples.txt"', %q['tmp/spec/examples.txt']
 
-file '.travis.yml', <<YAML
----
-language: ruby
-rvm:
-  - #{ENV['RUBY_VERSION']}
-
-before_install:
-  - export DISPLAY=:99.0
-  - sh -e /etc/init.d/xvfb start
-
-bundler_args: --without development production --jobs 3 --retry 3
-
-before_script:
-  - rake db:test:prepare
-
-cache: bundler
-YAML
+travis_config = YAML.load_file('.travis.yml')
+file '.travis.yml', YAML.dump(
+  'language' => 'ruby',
+  'rvm' => [
+    ENV['RUBY_VERSION']
+  ],
+  'before_install' => travis_config['before_install'],
+  'bundler_args' => '--without development production --jobs 3 --retry 3',
+  'before_script' => [
+    'rake db:test:prepare'
+  ],
+  'cache' => 'bundler'
+)
 
 bundle 'binstubs rspec-core'
 bundle 'exec spring binstub --all'

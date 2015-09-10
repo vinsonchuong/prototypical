@@ -24,6 +24,11 @@ setup() {
 	[[ $output = *'Dependency Status'*'gemnasium.com/GITHUB_USERNAME/awesome_blog'* ]]
 	[[ $output = *'Code Climate'*'codeclimate.com/github/GITHUB_USERNAME/awesome_blog'* ]]
 
+	run cat '.travis.yml'
+	[[ $output = *'language: ruby'* ]]
+	[[ $output = *'xvfb start'* ]]
+	[[ $output = *'rake db:test:prepare'* ]]
+
 	run bin/rails generate scaffold article title:string
 	run bin/rake db:migrate
 	run bin/rails runner 'Article.create(title: "First Article")'

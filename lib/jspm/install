@@ -10,6 +10,15 @@ cat <<MARKDOWN >> README.md
 [![Code Climate](https://codeclimate.com/github/${github_username}/${project_dir}/badges/gpa.svg)](https://codeclimate.com/github/${github_username}/${project_dir})
 MARKDOWN
 
+ruby -r 'yaml' <<RUBY
+travis_config = YAML.load_file('.travis.yml')
+File.write '.travis.yml', YAML.dump(
+  'language' => 'node_js',
+  'node_js' => ['0.12'],
+  'before_install' => travis_config['before_install']
+)
+RUBY
+
 npm init --yes
 echo '/node_modules/' >> '.gitignore'
 

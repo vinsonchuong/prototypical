@@ -25,6 +25,9 @@
 	[[ $output = *'# Awesome Blog'* ]]
 	[[ $output = *'Build Status'*'travis-ci.org/GITHUB_USERNAME/awesome_blog'* ]]
 
+	run cat '.travis.yml'
+	[[ $output = *'language: generic'* ]]
+
 	popd &>/dev/null
 }
 

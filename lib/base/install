@@ -59,6 +59,17 @@ cat <<MARKDOWN > README.md
 [![Build Status](https://travis-ci.org/${github_username}/${project_dir}.svg?branch=master)](https://travis-ci.org/${github_username}/${project_dir})
 MARKDOWN
 
+echo 'Adding generic .travis.yml' >&2
+ruby -r 'yaml' <<RUBY > '.travis.yml'
+puts YAML.dump(
+  'language' => 'generic',
+  'before_install' => [
+    'export DISPLAY=:99.0',
+    'sh -e /etc/init.d/xvfb start'
+  ]
+)
+RUBY
+
 cat <<BASH
 $(cat "${lib}/versions")
 export path=$(printf '%q' "$path")
