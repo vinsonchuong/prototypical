@@ -5,11 +5,14 @@ set -o nounset
 set -o pipefail
 
 eval "$(prototypical base "$@")"
+echo "Creating prototypical Node.js project at ${path}" >&2
 
+echo 'Appending to README.md' >&2
 cat <<MARKDOWN >> README.md
 [![Code Climate](https://codeclimate.com/github/${github_username}/${project_dir}/badges/gpa.svg)](https://codeclimate.com/github/${github_username}/${project_dir})
 MARKDOWN
 
+echo 'Adding to .travis.yml' >&2
 ruby -r 'yaml' <<RUBY
 travis_config = YAML.load_file('.travis.yml')
 File.write '.travis.yml', YAML.dump(
@@ -19,7 +22,32 @@ File.write '.travis.yml', YAML.dump(
 )
 RUBY
 
-npm init --yes
+echo 'Adding package.json' >&2
+node <<JAVASCRIPT
+function version(packageName) {
+return require('child_process')
+  .execSync('npm show ' + packageName + ' version', {encoding: 'utf8'})
+  .trim();
+}
+
+require('fs').writeFileSync('package.json', JSON.stringify({
+  name: process.env['project_dir'],
+  scripts: {
+    prepublish: 'dist-es6',
+    test: 'eslint && jasmine'
+  },
+  dependencies: {
+    'node-promise-es6': '^' + version('node-promise-es6')
+  },
+  devDependencies: {
+    'dist-es6': '^' + version('dist-es6'),
+    'jasmine-es6': '^' + version('jasmine-es6'),
+    'eslint-defaults': '^' + version('eslint-defaults')
+  },
+  private: true
+}, null, 2) + '\\n');
+JAVASCRIPT
+
 echo '/node_modules/' >> '.gitignore'
 
 npm install --save-dev jspm

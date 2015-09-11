@@ -5,6 +5,7 @@ set -o nounset
 set -o pipefail
 
 eval "$(prototypical base "$@")"
+echo "Creating prototypical Rails project at ${path}" >&2
 
 gem install bundler
 cat <<-RUBY > 'Gemfile'

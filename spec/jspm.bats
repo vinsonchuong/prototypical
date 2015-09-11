@@ -22,6 +22,9 @@
 	[[ $output = *'language: node_js'* ]]
 	[[ $output = *'xvfb start'* ]]
 
+	run cat 'package.json'
+	[[ $output = *'"name": "awesome_blog"'* ]]
+
 	npm start &> server &
   while true
   do
