@@ -18,12 +18,17 @@
 	[[ $output = *'Build Status'*'travis-ci.org/GITHUB_USERNAME/awesome_blog'* ]]
 	[[ $output = *'Code Climate'*'codeclimate.com/github/GITHUB_USERNAME/awesome_blog'* ]]
 
+	run cat '.gitignore'
+	[[ $output = *'/node_modules'* ]]
+	[[ $output = *'/jspm_packages'* ]]
+
 	run cat '.travis.yml'
 	[[ $output = *'language: node_js'* ]]
 	[[ $output = *'xvfb start'* ]]
 
 	run cat 'package.json'
 	[[ $output = *'"name": "awesome_blog"'* ]]
+	[[ $output = *'"jspm": {'* ]]
 
 	npm start &> server &
   while true

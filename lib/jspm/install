@@ -7,6 +7,12 @@ set -o pipefail
 eval "$(prototypical base "$@")"
 echo "Creating prototypical Node.js project at ${path}" >&2
 
+echo 'Adding .gitignore' >&2
+cat <<TEXT > '.gitignore'
+/node_modules
+/jspm_packages
+TEXT
+
 echo 'Appending to README.md' >&2
 cat <<MARKDOWN >> README.md
 [![Code Climate](https://codeclimate.com/github/${github_username}/${project_dir}/badges/gpa.svg)](https://codeclimate.com/github/${github_username}/${project_dir})
@@ -25,16 +31,17 @@ RUBY
 echo 'Adding package.json' >&2
 node <<JAVASCRIPT
 function version(packageName) {
-return require('child_process')
-  .execSync('npm show ' + packageName + ' version', {encoding: 'utf8'})
-  .trim();
+  return require('child_process')
+    .execSync('npm show ' + packageName + ' version', {encoding: 'utf8'})
+    .trim();
 }
 
 require('fs').writeFileSync('package.json', JSON.stringify({
   name: process.env['project_dir'],
   scripts: {
     prepublish: 'dist-es6',
-    test: 'eslint && jasmine'
+    test: 'eslint && jasmine',
+	start: 'http-server'
   },
   dependencies: {
     'node-promise-es6': '^' + version('node-promise-es6')
@@ -42,22 +49,21 @@ require('fs').writeFileSync('package.json', JSON.stringify({
   devDependencies: {
     'dist-es6': '^' + version('dist-es6'),
     'jasmine-es6': '^' + version('jasmine-es6'),
-    'eslint-defaults': '^' + version('eslint-defaults')
+    'eslint-defaults': '^' + version('eslint-defaults'),
+    'jspm': '^' + version('jspm'),
+    'http-server': '^' + version('http-server')
   },
   private: true
 }, null, 2) + '\\n');
 JAVASCRIPT
 
-echo '/node_modules/' >> '.gitignore'
+echo 'Setting Up npm' >&2
+npm install >&2
 
-npm install --save-dev jspm
-node_modules/.bin/jspm init -y
-echo '/jspm_packages/' >> '.gitignore'
+echo 'Setting Up jspm' >&2
+'node_modules/.bin/jspm' init -y >&2
 
-npm install --save-dev http-server
-cat package.json | jq '.scripts.start = "http-server"' | tee package.json
-
-tee index.html <<-HTML
+cat <<HTML > 'index.html'
 <!DOCTYPE html>
 <meta charset="UTF-8">
 <script src="jspm_packages/system.js"></script>
@@ -65,6 +71,6 @@ tee index.html <<-HTML
 <script>System.import('index.js')</script>
 HTML
 
-tee index.js <<-HTML
+cat <<HTML > 'index.js'
 document.body.textContent = 'Hello World!';
 HTML
