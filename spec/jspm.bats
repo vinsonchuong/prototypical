@@ -34,7 +34,7 @@
   while true
   do
     sleep 1
-    if [[ $(cat server) = *'http://0.0.0.0:8080'* ]]
+    if [[ $(cat server) = *'8080'* ]]
     then
       break
     fi
@@ -50,7 +50,7 @@ teardown() {
 	if [[ -d '/tmp/awesome_blog' ]]
 	then
 		pushd '/tmp/awesome_blog'
-    server_pid=$(ps -eo '%p:%a' | awk -F: '$2 ~ /^node.*http-server$/ {print $1}')
+    server_pid=$(ps -eo '%p:%a' | awk -F: '$2 == "node server.js" {print $1}')
     if [[ $server_pid ]]
     then
       kill "$server_pid"

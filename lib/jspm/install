@@ -40,8 +40,7 @@ require('fs').writeFileSync('package.json', JSON.stringify({
   name: process.env['project_dir'],
   scripts: {
     prepublish: 'dist-es6',
-    test: 'eslint && jasmine',
-	start: 'http-server'
+    test: 'eslint && jasmine'
   },
   dependencies: {
     'node-promise-es6': '^' + version('node-promise-es6')
@@ -51,7 +50,7 @@ require('fs').writeFileSync('package.json', JSON.stringify({
     'jasmine-es6': '^' + version('jasmine-es6'),
     'eslint-defaults': '^' + version('eslint-defaults'),
     'jspm': '^' + version('jspm'),
-    'http-server': '^' + version('http-server')
+    'express': '^' + version('express')
   },
   private: true
 }, null, 2) + '\\n');
@@ -70,6 +69,16 @@ cat <<HTML > 'index.html'
 <script src="config.js"></script>
 <script>System.import('index.js')</script>
 HTML
+
+cat <<JAVASCRIPT > 'server.js'
+const express = require('express');
+const app = express();
+app.use(express.static('.'));
+const server = app.listen(8080, function() {
+  const url = server.address();
+  console.log('Listening on http://%s:%s', url.address, url.port);
+});
+JAVASCRIPT
 
 cat <<HTML > 'index.js'
 document.body.textContent = 'Hello World!';
