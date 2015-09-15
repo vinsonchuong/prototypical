@@ -38,19 +38,8 @@ function version(packageName) {
 
 require('fs').writeFileSync('package.json', JSON.stringify({
   name: process.env['project_dir'],
-  scripts: {
-    prepublish: 'dist-es6',
-    test: 'eslint && jasmine'
-  },
-  dependencies: {
-    'node-promise-es6': '^' + version('node-promise-es6')
-  },
   devDependencies: {
-    'dist-es6': '^' + version('dist-es6'),
-    'jasmine-es6': '^' + version('jasmine-es6'),
-    'eslint-defaults': '^' + version('eslint-defaults'),
-    'jspm': '^' + version('jspm'),
-    'express': '^' + version('express')
+    'jspm': '^' + version('jspm')
   },
   private: true
 }, null, 2) + '\\n');
@@ -60,9 +49,11 @@ echo 'Setting Up npm' >&2
 npm install >&2
 
 echo 'Setting Up jspm' >&2
-'node_modules/.bin/jspm' init -y >&2
+jspm='node_modules/.bin/jspm'
+$jspm init -y >&2
+$jspm install 'npm:express'
 
-cat <<HTML > 'index.html'
+cat <<'HTML' > 'index.html'
 <!DOCTYPE html>
 <meta charset="UTF-8">
 <script src="jspm_packages/system.js"></script>
@@ -70,16 +61,28 @@ cat <<HTML > 'index.html'
 <script>System.import('index.js')</script>
 HTML
 
-cat <<JAVASCRIPT > 'server.js'
-const express = require('express');
+cat <<'JAVASCRIPT' > 'server.js'
+require('jspm')
+  .Loader()
+  .import('./app')
+  .catch(function(error) {
+    process.stdout.write(error.message + '\n');
+  });
+JAVASCRIPT
+
+cat <<'JAVASCRIPT' > 'app.js'
+import express from 'express';
+
 const app = express();
+
 app.use(express.static('.'));
-const server = app.listen(8080, function() {
-  const url = server.address();
-  console.log('Listening on http://%s:%s', url.address, url.port);
+
+const server = app.listen(8080, () => {
+  const {address, port} = server.address();
+  process.stdout.write(`Listening on http://${address}:${port}\n`);
 });
 JAVASCRIPT
 
-cat <<HTML > 'index.js'
+cat <<'HTML' > 'index.js'
 document.body.textContent = 'Hello World!';
 HTML
