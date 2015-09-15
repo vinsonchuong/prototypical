@@ -62,9 +62,11 @@ cat <<'HTML' > 'index.html'
 HTML
 
 cat <<'JAVASCRIPT' > 'server.js'
-require('jspm')
-  .Loader()
-  .import('./app')
+var System = require('jspm').Loader();
+System.import('babel/polyfill')
+  .then(function() {
+    return System.import('./app');
+  })
   .catch(function(error) {
     process.stdout.write(error.message + '\n');
   });

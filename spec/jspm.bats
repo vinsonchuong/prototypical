@@ -30,6 +30,8 @@
 	[[ $output = *'"name": "awesome_blog"'* ]]
 	[[ $output = *'"jspm": {'* ]]
 
+	echo 'console.log(`Array#includes: ${[1].includes(1)}`)' >> 'app.js'
+
 	npm start &> server &
   while true
   do
@@ -43,6 +45,9 @@
   run curl 'http://localhost:8080'
 	[[ $output = *'System.import'* ]]
 
+	run cat 'server'
+	[[ $output = *'Array#includes: true'* ]]
+
 	popd &>/dev/null
 }
 
@@ -50,7 +55,7 @@ teardown() {
 	if [[ -d '/tmp/awesome_blog' ]]
 	then
 		pushd '/tmp/awesome_blog'
-    server_pid=$(ps -eo '%p:%a' | awk -F: '$2 == "node server.js" {print $1}')
+		server_pid=$(ps -eo '%p:%a' | awk -F: '$2 == "node server.js" {print $1}')
     if [[ $server_pid ]]
     then
       kill "$server_pid"
