@@ -31,6 +31,7 @@
 	[[ $output = *'"jspm": {'* ]]
 
 	echo 'console.log(`Array#includes: ${[1].includes(1)}`)' >> 'app.js'
+	echo 'add(`Array#includes: ${[1].includes(1)}`);' >> 'index.js'
 
 	npm start &> server &
   while true
@@ -53,12 +54,12 @@
 					return document.body.textContent;
 				}));
 				phantom.exit();
-			}, 100);
+			}, 5000);
 		});
 	JAVASCRIPT
 	)
-	echo "$output"
 	[[ $output = *'Hello World!'* ]]
+	[[ $output = *'Array#includes: true'* ]]
 
 	popd &>/dev/null
 }
