@@ -42,11 +42,23 @@
     fi
   done
 
-  run curl 'http://localhost:8080'
-	[[ $output = *'System.import'* ]]
-
 	run cat 'server'
 	[[ $output = *'Array#includes: true'* ]]
+
+	run phantomjs <(cat <<-'JAVASCRIPT'
+		var page = require('webpage').create();
+		page.open('http://localhost:8080', function(status) {
+			setTimeout(function() {
+				console.log(page.evaluate(function() {
+					return document.body.textContent;
+				}));
+				phantom.exit();
+			}, 100);
+		});
+	JAVASCRIPT
+	)
+	echo "$output"
+	[[ $output = *'Hello World!'* ]]
 
 	popd &>/dev/null
 }

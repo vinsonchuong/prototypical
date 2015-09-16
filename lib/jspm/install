@@ -86,5 +86,7 @@ const server = app.listen(8080, () => {
 JAVASCRIPT
 
 cat <<'HTML' > 'index.js'
-document.body.textContent = 'Hello World!';
+const p = document.createElement('p');
+p.textContent = 'Hello World!';
+document.body.appendChild(p);
 HTML
