@@ -53,6 +53,11 @@ jspm='node_modules/.bin/jspm'
 $jspm init -y >&2
 $jspm install 'npm:express'
 
+for lib in 'fs' 'path'
+do
+	$jspm install "$lib=github:jspm/nodelibs-$lib"
+done
+
 cat <<'HTML' > 'index.html'
 <!DOCTYPE html>
 <meta charset="UTF-8">
@@ -81,6 +86,8 @@ System.import('babel/polyfill')
 JAVASCRIPT
 
 cat <<'JAVASCRIPT' > 'app.js'
+import fs from 'fs'
+import path from 'path'
 import express from 'express';
 
 const app = express();
