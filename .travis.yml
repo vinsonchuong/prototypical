@@ -1,10 +1,11 @@
 ---
 language: bash
-
+env:
+  global:
+    secure: MfNJXTLGgCOdJOdgsp6yluzpNITexpHlMeuVK9qvY+MDrty2GOb6CJyKoJ5jjzBauh8YJDPxB6R7CMg2PrCTBbsE8SByUIqJP/vY7Kg/lROB/ayNRsSQzRQLJTQydeTKsFJjaR1V973rtKnvrwPbkYWd0WEJKWlLmpQ2EHdO8ZNhEt4GqlrkIiNIJsHQ4yArNHmzXu62ucStK+uVFuhl1kOqks90tTyQmPvu77J9onj/IciaHU39QtjMz9CMWaIlteeMb0hi08qdRrVcyIdByS9Ryd2sXXxP/gXgtzfOddl3RR0rkMOsklH8rGMGRO3AApdblwpsPGDTnyK8zIxY/yXqxVQbF1t3uTr/WTffOET/DG/D+iySRVFFVve+N6rXJxjTPKQ+zhcGtvGAVZGylsLGcUzz2073CAHhN+s2apA8ttlmjWxhX5J1SnPdisQNNMV9uuGCMMaL8J0TdrO++dkaWAB2LSR1/eMoGM6HtUUoNMthF7qpW9ghKTQbsWb3Fro/gHH5H8cXDxvZdBCyj1lHeZrIqY11mkvuwbXuBT/ZWIxNBtj/gBAGYAGaegVc0Oic8KEB2Z+RfEOLr+ZsePenQfT6JcAXtsDLF0bG8cHGlnTVgHJgPC/WNzMlLqdNrD3sWaUu5z6ICPH6palx4wdS1GzaYTXh4IL0TfBNsTg=
 before_install:
   - export DISPLAY=:99.0
   - sh -e /etc/init.d/xvfb start
-
 install:
   - source "$PWD/lib/versions"
   - rvm use "$RUBY_VERSION" --install --binary
@@ -12,6 +13,5 @@ install:
   - git clone https://github.com/sstephenson/bats
   - git clone https://github.com/vinsonchuong/bash-common-parse-options
   - export PATH=$PWD/bin:$PWD/bats/bin:$PWD/bash-common-parse-options/bin:$PATH
-
 script:
   - bats spec
