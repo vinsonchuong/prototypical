@@ -2,7 +2,6 @@
 
 @test 'it can bootstrap a jspm app' {
 	run prototypical jspm '/tmp/awesome_blog'
-	echo "$output"
 	[[ $status = 0 ]]
 
 	[[ -d '/tmp/awesome_blog' ]]
