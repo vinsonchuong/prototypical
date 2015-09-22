@@ -6,6 +6,43 @@ def bundle(command)
   end
 end
 
+remove_file 'README.rdoc'
+append_to_file 'README.md', <<MARKDOWN
+[![Dependency Status](https://gemnasium.com/#{ENV['github_username']}/#{ENV['project_dir']}.svg)](https://gemnasium.com/#{ENV['github_username']}/#{ENV['project_dir']})
+[![Code Climate](https://codeclimate.com/github/#{ENV['github_username']}/#{ENV['project_dir']}/badges/gpa.svg)](https://codeclimate.com/github/#{ENV['github_username']}/#{ENV['project_dir']})
+
+## Development
+The application requires the following external dependencies:
+* PostgreSQL
+* Ruby #{ENV['RUBY_VERSION']}
+
+Setup a development environment with:
+```bash
+bin/setup
+```
+
+You should not be able to run tests and start the application:
+```bash
+bin/rake
+bin/rails server
+```
+MARKDOWN
+
+travis_config = YAML.load_file('.travis.yml')
+file '.travis.yml', YAML.dump(
+  'language' => 'ruby',
+  'rvm' => [
+    ENV['RUBY_VERSION']
+  ],
+  'before_install' => travis_config['before_install'],
+  'bundler_args' => '--without development production --jobs 3 --retry 3',
+  'before_script' => [
+    'rake db:test:prepare'
+  ],
+  'cache' => 'bundler'
+)
+
+
 file 'Gemfile', <<-RUBY
 source 'https://rubygems.org'
 
@@ -48,7 +85,26 @@ group :test do
 end
 RUBY
 
-bundle 'install --jobs 4 --retry 3'
+file 'bin/setup', <<RUBY
+#!/usr/bin/env ruby
+require 'fileutils'
+
+Dir.chdir File.expand_path('../../',  __FILE__) do
+  puts '== Installing Dependencies =='
+  system 'gem install bundler --conservative'
+  system 'bundle check || bundle install --jobs 4 --retry 3'
+
+  puts
+
+  puts '== Preparing Database =='
+  if File.exist? 'db/schema.rb'
+    system 'bin/rake db:setup db:test:prepare'
+  else
+    system 'bin/rake db:create db:migrate db:test:prepare'
+  end
+end
+RUBY
+Bundler.with_clean_env {run 'bin/setup'}
 
 copy_file 'app/assets/stylesheets/application.css', 'app/assets/stylesheets/application.css.scss'
 remove_file 'app/assets/stylesheets/application.css'
@@ -76,50 +132,6 @@ gsub_file 'spec/spec_helper.rb', "=begin\n", ''
 gsub_file 'spec/spec_helper.rb', "=end\n", ''
 gsub_file 'spec/spec_helper.rb', '"spec/examples.txt"', %q['tmp/spec/examples.txt']
 
-travis_config = YAML.load_file('.travis.yml')
-file '.travis.yml', YAML.dump(
-  'language' => 'ruby',
-  'rvm' => [
-    ENV['RUBY_VERSION']
-  ],
-  'before_install' => travis_config['before_install'],
-  'bundler_args' => '--without development production --jobs 3 --retry 3',
-  'before_script' => [
-    'rake db:test:prepare'
-  ],
-  'cache' => 'bundler'
-)
-
 bundle 'binstubs rspec-core'
 bundle 'exec spring binstub --all'
-rake 'db:create db:migrate db:test:prepare'
-
-remove_file 'README.rdoc'
-append_to_file 'README.md', <<MARKDOWN
-[![Dependency Status](https://gemnasium.com/#{ENV['github_username']}/#{ENV['project_dir']}.svg)](https://gemnasium.com/#{ENV['github_username']}/#{ENV['project_dir']})
-[![Code Climate](https://codeclimate.com/github/#{ENV['github_username']}/#{ENV['project_dir']}/badges/gpa.svg)](https://codeclimate.com/github/#{ENV['github_username']}/#{ENV['project_dir']})
-
-## Development
-The application requires the following external dependencies:
-* PostgreSQL
-* Ruby #{ENV['RUBY_VERSION']}
-* Bundler
-
-The rest of the dependencies are handled through:
-```bash
-bundle install
-```
-
-Bootstrap the database with:
-```bash
-bin/rake db:setup
-```
-
-You should not be able to run tests and start the application:
-```bash
-bin/rake
-bin/rails server
-```
-MARKDOWN
-
 run 'spring stop'

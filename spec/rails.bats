@@ -7,7 +7,6 @@ setup() {
 @test 'it can bootstrap a Rails app' {
 	run prototypical rails '/tmp/awesome_blog'
 	[[ $status = 0 ]]
-	[[ $output = *'Successfully installed bundler'* ]]
 
 	[[ -d '/tmp/awesome_blog' ]]
 	pushd '/tmp/awesome_blog' &>/dev/null
