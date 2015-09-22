@@ -97,14 +97,12 @@ Dir.chdir File.expand_path('../../',  __FILE__) do
   puts
 
   puts '== Preparing Database =='
-  if File.exist? 'db/schema.rb'
-    system 'bin/rake db:setup db:test:prepare'
-  else
-    system 'bin/rake db:create db:migrate db:test:prepare'
-  end
+  system 'bin/rake db:setup db:test:prepare'
 end
 RUBY
-Bundler.with_clean_env {run 'bin/setup'}
+
+bundle 'install --jobs 4 --retry 3'
+rake 'db:create db:migrate db:test:prepare'
 
 copy_file 'app/assets/stylesheets/application.css', 'app/assets/stylesheets/application.css.scss'
 remove_file 'app/assets/stylesheets/application.css'
