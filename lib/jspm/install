@@ -38,6 +38,9 @@ function version(packageName) {
 
 require('fs').writeFileSync('package.json', JSON.stringify({
   name: process.env['project_dir'],
+  dependencies: {
+    'isomorphic-fetch': '^' + version('isomorphic-fetch')
+  },
   devDependencies: {
     'jspm': '^' + version('jspm')
   },
@@ -51,7 +54,7 @@ npm install >&2
 echo 'Setting Up jspm' >&2
 jspm='node_modules/.bin/jspm'
 $jspm init -y >&2
-$jspm install npm:express $(node <<JAVASCRIPT
+$jspm install npm:express npm:isomorphic-fetch $(node <<JAVASCRIPT
 require('https').get(
 	{
 		host: 'api.github.com',
@@ -86,7 +89,10 @@ cat <<'HTML' > 'index.html'
 <script src="jspm_packages/system.js"></script>
 <script src="config.js"></script>
 <script>
-  System.import('babel/polyfill')
+  Promise.all([
+    System.import('babel/polyfill'),
+	System.import('isomorphic-fetch')
+  ])
     .then(function() {
       return System.import('./index');
     })
@@ -97,6 +103,7 @@ cat <<'HTML' > 'index.html'
 HTML
 
 cat <<'JAVASCRIPT' > 'server.js'
+require('isomorphic-fetch');
 var System = require('jspm').Loader();
 System.import('babel/polyfill')
   .then(function() {
@@ -112,8 +119,13 @@ import fs from 'fs'
 import path from 'path'
 import express from 'express';
 
-const app = express();
+const api = express.Router();
+api.get('/', (request, response) => {
+  response.json({text: 'Hello from the API'});
+});
 
+const app = express();
+app.use('/api', api);
 app.use(express.static('.'));
 
 const server = app.listen(8080, () => {
@@ -132,4 +144,11 @@ JAVASCRIPT
 cat <<'JAVASCRIPT' > 'index.js'
 import add from './add';
 add('Hello World!');
+
+async function api() {
+  const response = await fetch('/api');
+  const json = await response.json();
+  add(json.text);
+}
+api();
 JAVASCRIPT

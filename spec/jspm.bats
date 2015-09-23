@@ -59,6 +59,7 @@
 	JAVASCRIPT
 	)
 	[[ $output = *'Hello World!'* ]]
+	[[ $output = *'Hello from the API'* ]]
 	[[ $output = *'Array#includes: true'* ]]
 
 	popd &>/dev/null
