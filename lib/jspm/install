@@ -39,7 +39,7 @@ function version(packageName) {
 require('fs').writeFileSync('package.json', JSON.stringify({
   name: process.env['project_dir'],
   dependencies: {
-    'isomorphic-fetch': '^' + version('isomorphic-fetch')
+    'node-fetch': '^' + version('node-fetch')
   },
   devDependencies: {
     'jspm': '^' + version('jspm')
@@ -54,7 +54,7 @@ npm install >&2
 echo 'Setting Up jspm' >&2
 jspm='node_modules/.bin/jspm'
 $jspm init -y >&2
-$jspm install npm:express npm:isomorphic-fetch $(node <<JAVASCRIPT
+$jspm install npm:express fetch $(node <<JAVASCRIPT
 require('https').get(
 	{
 		host: 'api.github.com',
@@ -91,7 +91,7 @@ cat <<'HTML' > 'index.html'
 <script>
   Promise.all([
     System.import('babel/polyfill'),
-	System.import('isomorphic-fetch')
+	System.import('fetch')
   ])
     .then(function() {
       return System.import('./index');
@@ -103,7 +103,7 @@ cat <<'HTML' > 'index.html'
 HTML
 
 cat <<'JAVASCRIPT' > 'server.js'
-require('isomorphic-fetch');
+require('node-fetch');
 var System = require('jspm').Loader();
 System.import('babel/polyfill')
   .then(function() {
