@@ -23,8 +23,17 @@ ruby -r 'yaml' <<RUBY
 travis_config = YAML.load_file('.travis.yml')
 File.write '.travis.yml', YAML.dump(
   'language' => 'node_js',
-  'node_js' => ['0.12'],
-  'before_install' => travis_config['before_install']
+  'node_js' => ['4.2'],
+  'addons' => {
+    'apt' => {
+      'sources' => ['ubuntu-toolchain-r-test'],
+      'packages' => ['g++-4.8']
+    }
+  },
+  'before_install' => travis_config['before_install'] + [
+    %q(export CXX='g++-4.8'),
+    'npm install -g npm'
+  ]
 )
 RUBY
 
