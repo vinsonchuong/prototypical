@@ -71,15 +71,12 @@ teardown() {
 	then
 		pushd '/tmp/awesome_blog'
 		server_pid=$(ps -eo '%p:%a' | awk -F: '$2 == "node server.js" {print $1}')
-    if [[ $server_pid ]]
-    then
-      kill "$server_pid"
-    fi
+		if [[ $server_pid ]]
+		then
+			kill "$server_pid"
+		fi
 		popd
-
-    ls -lha '/tmp/awesome_blog'
-    ps -eo '%p:%a'
-
+		sleep 1
 		rm -rf '/tmp/awesome_blog'
 	fi
 }
