@@ -76,6 +76,10 @@ teardown() {
       kill "$server_pid"
     fi
 		popd
+
+    ls -lha '/tmp/awesome_blog'
+    ps -eo '%p:%a'
+
 		rm -rf '/tmp/awesome_blog'
 	fi
 }
