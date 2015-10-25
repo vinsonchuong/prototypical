@@ -10,7 +10,7 @@
 	[[ $output = *'project_snake=awesome_blog'* ]]
 	[[ $output = *'project_camel=awesomeBlog'* ]]
 	[[ $output = *'project_class=AwesomeBlog'* ]]
-	[[ $output = *'github_username=GITHUB_USERNAME'* ]]
+	[[ $output = *'github_username='* ]]
 
 	[[ -d '/tmp/awesome_blog' ]]
 	pushd '/tmp/awesome_blog' &>/dev/null
@@ -23,7 +23,7 @@
 
 	run cat 'README.md'
 	[[ $output = *'# Awesome Blog'* ]]
-	[[ $output = *'Build Status'*'travis-ci.org/GITHUB_USERNAME/awesome_blog'* ]]
+	[[ $output = *'Build Status'*'travis-ci.org/'*'/awesome_blog'* ]]
 
 	run cat '.travis.yml'
 	[[ $output = *'language: generic'* ]]

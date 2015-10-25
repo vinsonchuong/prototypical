@@ -14,9 +14,10 @@
 	[[ $output = *'The MIT License'* ]]
 
 	run cat 'README.md'
+  echo "$output" > /tmp/bats-output
 	[[ $output = *'# Awesome Blog'* ]]
-	[[ $output = *'Build Status'*'travis-ci.org/GITHUB_USERNAME/awesome_blog'* ]]
-	[[ $output = *'Code Climate'*'codeclimate.com/github/GITHUB_USERNAME/awesome_blog'* ]]
+	[[ $output = *'Build Status'*'travis-ci.org/'*'/awesome_blog'* ]]
+	[[ $output = *'Code Climate'*'codeclimate.com/github/'*'/awesome_blog'* ]]
 
 	run cat '.gitignore'
 	[[ $output = *'/node_modules'* ]]

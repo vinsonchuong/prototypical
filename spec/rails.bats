@@ -19,9 +19,9 @@ setup() {
 
 	run cat 'README.md'
 	[[ $output = *'# Awesome Blog'* ]]
-	[[ $output = *'Build Status'*'travis-ci.org/GITHUB_USERNAME/awesome_blog'* ]]
-	[[ $output = *'Dependency Status'*'gemnasium.com/GITHUB_USERNAME/awesome_blog'* ]]
-	[[ $output = *'Code Climate'*'codeclimate.com/github/GITHUB_USERNAME/awesome_blog'* ]]
+	[[ $output = *'Build Status'*'travis-ci.org/'*'/awesome_blog'* ]]
+	[[ $output = *'Dependency Status'*'gemnasium.com/'*'/awesome_blog'* ]]
+	[[ $output = *'Code Climate'*'codeclimate.com/github/'*'/awesome_blog'* ]]
 
 	run cat '.travis.yml'
 	[[ $output = *'language: ruby'* ]]
