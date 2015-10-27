@@ -24,7 +24,7 @@ travis_config = YAML.load_file('.travis.yml')
 File.write '.travis.yml', YAML.dump(
   'sudo' => travis_config['sudo'],
   'dist' => travis_config['dist'],
-  'services' => travis_config['services'],
+  'addons' => travis_config['addons'],
   'language' => 'node_js',
   'node_js' => ['4.2'],
   'before_install' => travis_config['before_install'] + [

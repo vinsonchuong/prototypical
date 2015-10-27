@@ -64,7 +64,9 @@ ruby -r 'yaml' <<RUBY > '.travis.yml'
 puts YAML.dump(
   'sudo' => 'required',
   'dist' => 'trusty',
-  'services' => %w[postgresql],
+  'addons' => {
+    'postgresql' => '9.4'
+  },
   'language' => 'generic',
   'before_install' => [
     'export DISPLAY=:99.0',
