@@ -25,7 +25,7 @@
 
 	run cat '.travis.yml'
 	[[ $output = *'language: node_js'* ]]
-	[[ $output = *'xvfb start'* ]]
+	[[ $output = *'Xvfb'* ]]
 
 	run cat 'package.json'
 	[[ $output = *'"name": "awesome_blog"'* ]]

@@ -25,7 +25,7 @@ setup() {
 
 	run cat '.travis.yml'
 	[[ $output = *'language: ruby'* ]]
-	[[ $output = *'xvfb start'* ]]
+	[[ $output = *'Xvfb'* ]]
 	[[ $output = *'rake db:test:prepare'* ]]
 
 	run bin/rails generate scaffold article title:string
