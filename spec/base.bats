@@ -27,6 +27,7 @@
 
 	run cat '.travis.yml'
 	[[ $output = *'language: generic'* ]]
+	[[ $output = *'postgresql'* ]]
 
 	popd &>/dev/null
 }

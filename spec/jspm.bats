@@ -59,6 +59,7 @@
 		});
 	JAVASCRIPT
 	)
+	echo "$output"
 	[[ $output = *'Hello World!'* ]]
 	[[ $output = *'Hello from the API'* ]]
 	[[ $output = *'Array#includes: true'* ]]

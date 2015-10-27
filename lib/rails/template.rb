@@ -30,6 +30,9 @@ MARKDOWN
 
 travis_config = YAML.load_file('.travis.yml')
 file '.travis.yml', YAML.dump(
+  'sudo' => travis_config['sudo'],
+  'dist' => travis_config['dist'],
+  'services' => travis_config['services'],
   'language' => 'ruby',
   'rvm' => [
     ENV['RUBY_VERSION']

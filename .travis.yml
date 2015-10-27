@@ -1,6 +1,8 @@
 ---
 sudo: required
 dist: trusty
+services:
+  - postgresql
 language: bash
 env:
   global:
