@@ -17,6 +17,9 @@ install:
   - npm install -g npm
   - git clone https://github.com/sstephenson/bats
   - git clone https://github.com/vinsonchuong/bash-common-parse-options
-  - export PATH=$PWD/bin:$PWD/bats/bin:$PWD/bash-common-parse-options/bin:$PATH
+  - mkdir phantomjs
+  - curl -O https://s3.amazonaws.com/travis-phantomjs/phantomjs-2.0.0-ubuntu-14.04.tar.bz2
+  - tar -xf phantomjs-2.0.0-ubuntu-14.04.tar.bz2 -C phantomjs
+  - export PATH=$PWD/bin:$PWD/bats/bin:$PWD/bash-common-parse-options/bin:$PWD/phantomjs:$PATH
 script:
   - bats spec
