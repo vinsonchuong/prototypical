@@ -26,7 +26,7 @@
 	[[ $output = *'Build Status'*'travis-ci.org/'*'/awesome_blog'* ]]
 
 	run cat '.travis.yml'
-	[[ $output = *'language: generic'* ]]
+	[[ $output = *'language: ruby'* ]]
 	[[ $output = *'postgresql'* ]]
 
 	popd &>/dev/null
