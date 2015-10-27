@@ -13,16 +13,12 @@ before_install:
   - export DISPLAY=:99.0
   - Xvfb :99 -ac -screen 0 1024x768x8 &>/dev/null &
 install:
-  - phantomjs --version
   - source "$PWD/lib/versions"
   - rvm use "$RUBY_VERSION" --install --binary
   - nvm install "$NODE_VERSION"
   - npm install -g npm
   - git clone https://github.com/sstephenson/bats
   - git clone https://github.com/vinsonchuong/bash-common-parse-options
-  - mkdir phantomjs
-  - curl -O https://s3.amazonaws.com/travis-phantomjs/phantomjs-2.0.0-ubuntu-14.04.tar.bz2
-  - tar -xf phantomjs-2.0.0-ubuntu-14.04.tar.bz2 -C phantomjs
-  - export PATH=$PWD/bin:$PWD/bats/bin:$PWD/bash-common-parse-options/bin:$PWD/phantomjs:$PATH
+  - export PATH=$PWD/bin:$PWD/bats/bin:$PWD/bash-common-parse-options/bin:$PATH
 script:
   - bats spec

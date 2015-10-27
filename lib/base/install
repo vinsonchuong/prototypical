@@ -71,12 +71,7 @@ puts YAML.dump(
   'language' => 'ruby',
   'before_install' => [
     'export DISPLAY=:99.0',
-    'Xvfb :99 -ac -screen 0 1024x768x8 &>/dev/null &',
-
-    'mkdir phantomjs',
-    'curl -O https://s3.amazonaws.com/travis-phantomjs/phantomjs-2.0.0-ubuntu-14.04.tar.bz2',
-    'tar -xf phantomjs-2.0.0-ubuntu-12.04.tar.bz2 -C phantomjs',
-    'export PATH=$PWD/phantomjs:$PATH'
+    'Xvfb :99 -ac -screen 0 1024x768x8 &>/dev/null &'
   ]
 )
 RUBY
