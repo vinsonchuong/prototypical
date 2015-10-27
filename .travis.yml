@@ -13,6 +13,7 @@ before_install:
   - export DISPLAY=:99.0
   - Xvfb :99 -ac -screen 0 1024x768x8 &>/dev/null &
 install:
+  - phantomjs --version
   - source "$PWD/lib/versions"
   - rvm use "$RUBY_VERSION" --install --binary
   - nvm install "$NODE_VERSION"
