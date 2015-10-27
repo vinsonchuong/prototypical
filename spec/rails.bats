@@ -55,7 +55,6 @@ setup() {
 	RUBY
 
 	run bin/rspec
-	echo "$output"
 	[[ $output = *'32 examples, 0 failures, 17 pending'* ]]
 
 	run bin/spring status
