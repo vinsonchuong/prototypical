@@ -1,8 +1,8 @@
 ---
 sudo: required
 dist: trusty
-services:
-  - postgresql
+addons:
+  postgresql: 9.4
 language: ruby
 env:
   global:
