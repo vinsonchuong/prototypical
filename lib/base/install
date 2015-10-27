@@ -67,7 +67,7 @@ puts YAML.dump(
   'addons' => {
     'postgresql' => '9.4'
   },
-  'language' => 'generic',
+  'language' => 'ruby',
   'before_install' => [
     'export DISPLAY=:99.0',
     'Xvfb :99 -ac -screen 0 1024x768x8 &>/dev/null &',
