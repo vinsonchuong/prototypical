@@ -65,7 +65,8 @@ puts YAML.dump(
   'sudo' => 'required',
   'dist' => 'trusty',
   'addons' => {
-    'postgresql' => '9.4'
+    'postgresql' => '$POSTGRES_VERSION',
+    'redis' => '$REDIS_VERSION'
   },
   'language' => 'ruby',
   'before_install' => [
