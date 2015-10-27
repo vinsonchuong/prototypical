@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 export POSTGRES_VERSION='9.4'
-export REDIS_VERSION='3.0.4'
 
 export RUBY_VERSION='2.2.3'
 export RAILS_VERSION='4.2.4'

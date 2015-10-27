@@ -3,7 +3,8 @@ sudo: required
 dist: trusty
 addons:
   postgresql: 9.4
-  redis-server: 3.0
+services:
+  - redis-server
 language: ruby
 env:
   global:

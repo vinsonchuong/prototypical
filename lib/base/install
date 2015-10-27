@@ -65,9 +65,9 @@ puts YAML.dump(
   'sudo' => 'required',
   'dist' => 'trusty',
   'addons' => {
-    'postgresql' => '$POSTGRES_VERSION',
-    'redis-server' => '$REDIS_VERSION'
+    'postgresql' => '$POSTGRES_VERSION'
   },
+  'services' => %w[redis-server],
   'language' => 'ruby',
   'before_install' => [
     'export DISPLAY=:99.0',

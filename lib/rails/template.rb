@@ -33,6 +33,7 @@ file '.travis.yml', YAML.dump(
   'sudo' => travis_config['sudo'],
   'dist' => travis_config['dist'],
   'addons' => travis_config['addons'],
+  'services' => travis_config['services'],
   'language' => 'ruby',
   'rvm' => [
     ENV['RUBY_VERSION']
