@@ -27,7 +27,7 @@ File.write '.travis.yml', YAML.dump(
   'addons' => travis_config['addons'],
   'services' => travis_config['services'],
   'language' => 'node_js',
-  'node_js' => ['4.2'],
+  'node_js' => ['${NODE_VERSION}'],
   'before_install' => travis_config['before_install'] + [
     'npm install -g npm'
   ]
