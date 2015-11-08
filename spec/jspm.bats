@@ -28,9 +28,8 @@
 
 	run cat 'package.json'
 	[[ $output = *'"name": "awesome_blog"'* ]]
-	[[ $output = *'"jspm": {'* ]]
 
-	echo 'console.log(`Array#includes: ${[1].includes(1)}`)' >> 'app.js'
+	echo 'console.log(`Array#includes: ${[1].includes(1)}`)' >> 'server.js'
 	echo 'add(`Array#includes: ${[1].includes(1)}`);' >> 'index.js'
 
 	npm start &> server &
@@ -70,7 +69,7 @@ teardown() {
 	if [[ -d '/tmp/awesome_blog' ]]
 	then
 		pushd '/tmp/awesome_blog'
-		server_pid=$(ps -eo '%p:%a' | awk -F: '$2 == "node server.js" {print $1}')
+		server_pid=$(ps -eo '%p:%a' | awk -F: '$2 == "node /tmp/awesome_blog/node_modules/.bin/serve-es6" {print $1}')
 		if [[ $server_pid ]]
 		then
 			kill "$server_pid"

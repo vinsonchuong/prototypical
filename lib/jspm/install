@@ -44,60 +44,34 @@ function version(packageName) {
 
 require('fs').writeFileSync('package.json', JSON.stringify({
   name: process.env['project_dir'],
+  scripts: {
+    prepublish: 'jspm-node',
+	start: 'serve-es6'
+  },
   dependencies: {
-    'node-fetch': '^' + version('node-fetch')
+    'isomorphic-fetch': '^' + version('isomorphic-fetch'),
+    'express': '^' + version('express')
   },
   devDependencies: {
-    'jspm': '^' + version('jspm')
+    'jspm-node': '^' + version('jspm-node'),
+    'serve-es6': '^' + version('serve-es6')
   },
   private: true
 }, null, 2) + '\\n');
 JAVASCRIPT
 
-echo 'Setting Up npm' >&2
+echo 'Setting Up npm and jspm' >&2
 npm install >&2
-
-echo 'Setting Up jspm' >&2
-jspm='node_modules/.bin/jspm'
-$jspm init -y >&2
-$jspm install npm:express fetch $(node <<JAVASCRIPT
-require('https').get(
-	{
-		host: 'api.github.com',
-		path: '/search/repositories?q=nodelibs+user:jspm+in:name',
-		headers: {
-			'User-Agent': 'prototypical'
-		}
-	},
-	function(response) {
-		var data = '';
-		response.setEncoding('utf8');
-		response.on('data', function(chunk) {
-			data += chunk;
-		});
-		response.on('end', function() {
-			var packages = JSON.parse(data)
-				.items
-				.map(function(item) { return item.full_name; })
-				.filter(function(repo) { return repo !== 'jspm/nodelibs'; })
-				.map(function(repo) { return repo.match(/^jspm\/nodelibs-(.*)$/)[1]; })
-				.map(function(lib) { return lib + '=github:jspm/nodelibs-' + lib; });
-			process.stdout.write(packages.join(' '));
-		});
-	}
-);
-JAVASCRIPT
-)
 
 cat <<'HTML' > 'index.html'
 <!DOCTYPE html>
 <meta charset="UTF-8">
 <script src="jspm_packages/system.js"></script>
-<script src="config.js"></script>
+<script src="jspm_packages/config.js"></script>
 <script>
   Promise.all([
     System.import('babel/polyfill'),
-	System.import('fetch')
+	System.import('isomorphic-fetch')
   ])
     .then(function() {
       return System.import('./index');
@@ -109,20 +83,9 @@ cat <<'HTML' > 'index.html'
 HTML
 
 cat <<'JAVASCRIPT' > 'server.js'
-require('node-fetch');
-var System = require('jspm').Loader();
-System.import('babel/polyfill')
-  .then(function() {
-    return System.import('./app');
-  })
-  .catch(function(error) {
-    process.stdout.write(error.message + '\n');
-  });
-JAVASCRIPT
-
-cat <<'JAVASCRIPT' > 'app.js'
 import fs from 'fs'
 import path from 'path'
+import fetch from 'isomorphic-fetch';
 import express from 'express';
 
 const api = express.Router();
