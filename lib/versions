@@ -4,4 +4,4 @@ export POSTGRES_VERSION='9.4'
 export RUBY_VERSION='2.2.3'
 export RAILS_VERSION='4.2.4'
 
-export NODE_VERSION='5.0'
+export NODE_VERSION='5.1'
