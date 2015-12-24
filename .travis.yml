@@ -14,7 +14,7 @@ before_install:
   - Xvfb :99 -ac -screen 0 1024x768x8 &>/dev/null &
 install:
   - source "$PWD/lib/versions"
-  - rvm use ruby --latest --install --binary
+  - rvm use ruby-head --latest --install --binary
   - nvm install node
   - npm install -g npm
   - git clone https://github.com/sstephenson/bats
