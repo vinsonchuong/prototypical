@@ -19,7 +19,7 @@ cat <<MARKDOWN >> README.md
 MARKDOWN
 
 echo 'Adding to .travis.yml' >&2
-ruby -r 'yaml' <<RUBY
+ruby -r 'yaml' <<'RUBY'
 travis_config = YAML.load_file('.travis.yml')
 File.write '.travis.yml', YAML.dump(
   'sudo' => travis_config['sudo'],
@@ -27,7 +27,7 @@ File.write '.travis.yml', YAML.dump(
   'addons' => travis_config['addons'],
   'services' => travis_config['services'],
   'language' => 'node_js',
-  'node_js' => ['${NODE_VERSION}'],
+  'node_js' => ['node'],
   'before_install' => travis_config['before_install'] + [
     'npm install -g npm'
   ]

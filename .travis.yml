@@ -6,6 +6,8 @@ addons:
 services:
   - redis-server
 language: ruby
+node_js:
+  - node
 env:
   global:
     secure: R1GZ9hO7aFP+v8QQkLeESiwFK/esxjK4fympE0a+RXclZCFhPU2CSeBiz4lp3kT88SbiTErJfZLoZuVmrnGki0NI+PDQkjxRBxqXgCIO25Yxn8lsXP0sVespVpDqODDVmHqTwqwQ86nJ1rGRgLbo6s88vSJqkG6SL5Bp0QExzLRAWeB/VERR4D/mDoGAloG5Bw6uBwfjpznIOzW/+Q+3iIcFk8iMe2ihVWYWYCZPnX5BCcpLxQ3NH33SKxEugmdxkc6ZkDmDxBqWix90HW8fS2uStQveYTBFdjkm3M/7y8g2fSp8QrZpH6x5fst6mcX1VaCCD5/4PeK3vcUe6+IN7vCLetY3QfylgJShtCCxm2mVOJo92Izdvi2Bb4Z3ubPiHz4yoga7E1x5luRvAceNwXcoy1PM2Xcb0uJGEhRStUipmf4n9ik/WnB+PqUQvPFqTCc1BAaV2KBYGSC80NS7cqv38rWr/HaTqr0PyMkZG+On9RhnJx4FuG/e/7qopiZ1mUcPjpcLRVx+e4fJ74Df8IoK5INWN7I3zapKHQJ8fdpDptxq7YVXCVn7hjDCu66hZDGMI2NZOoeMMynTx7J2U5LakSFSkoZ1O02iMgYBjXilLpEWnlgjuHlkQbQKS78WMNZePWdwPYWHvE61AnVVKpeBeG/TPIhvLyL1N4OuUtE=
@@ -15,7 +17,6 @@ before_install:
 install:
   - source "$PWD/lib/versions"
   - rvm use "$RUBY_VERSION" --install --binary
-  - nvm install "$NODE_VERSION"
   - npm install -g npm
   - git clone https://github.com/sstephenson/bats
   - git clone https://github.com/vinsonchuong/bash-common-parse-options
