@@ -35,9 +35,7 @@ file '.travis.yml', YAML.dump(
   'addons' => travis_config['addons'],
   'services' => travis_config['services'],
   'language' => 'ruby',
-  'rvm' => [
-    ENV['RUBY_VERSION']
-  ],
+  'rvm' => %w[ruby],
   'before_install' => travis_config['before_install'],
   'bundler_args' => '--without development production --jobs 3 --retry 3',
   'before_script' => [
