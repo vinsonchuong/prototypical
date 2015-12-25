@@ -2,4 +2,4 @@
 export POSTGRES_VERSION='9.4'
 
 export RUBY_VERSION='2.2.4'
-export RAILS_VERSION='4.2.4'
+export RAILS_VERSION='4.2.5'
