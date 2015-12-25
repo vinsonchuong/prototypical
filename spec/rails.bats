@@ -32,7 +32,7 @@ setup() {
 	run bin/rake db:migrate
 	run bin/rails runner 'Article.create(title: "First Article")'
 	run bin/rails runner 'puts Article.first.title'
-	[[ $output = 'First Article' ]]
+	[[ $output = *'First Article'* ]]
 
 	run bin/rails server --daemon
 	[[ $(curl 'http://localhost:3000/articles' 2>/dev/null) = *'Listing Articles'* ]]
