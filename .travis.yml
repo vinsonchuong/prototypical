@@ -15,6 +15,7 @@ before_install:
 install:
   - source "$PWD/lib/versions"
   - rvm use "$RUBY_VERSION" --install --binary
+  - gem install bundler
   - nvm install node
   - npm install -g npm
   - git clone https://github.com/sstephenson/bats
