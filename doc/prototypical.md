@@ -1,14 +1,17 @@
-# prototypical(1) -- echos input
+# prototypical(1) -- A starting point for a project
 
 ## SYNOPSIS
-`prototypical` [`-o`|`--output` .]  _text_<br>
+`prototypical` _recipe_ _directory_<br>
 `prototypical` `-h`|`--help`<br>
 
 ## DESCRIPTION
-`prototypical` echos strings passed in as input
+Create a `prototypical` project from the given `recipe`.
+
+Recipes include:
+
+* `rails`: A Ruby on Rails web application
+* `jspm` A JavaScript web application powered by the `jspm` package manager
 
 ## OPTIONS
 * -h, --help:
   Show help text and exit.
-* -o, --output <string>:
-  Output the given string
