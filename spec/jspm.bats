@@ -25,6 +25,7 @@
 	run cat '.travis.yml'
 	[[ $output = *'language: node_js'* ]]
 	[[ $output = *'Xvfb'* ]]
+	[[ $output = *'npm install -g npm'* ]]
 
 	run cat 'package.json'
 	[[ $output = *'"name": "awesome_blog"'* ]]

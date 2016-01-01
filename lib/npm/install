@@ -1,0 +1,113 @@
+#!/usr/bin/env bash
+set -o errexit
+set -o nounset
+# set -o xtrace
+set -o pipefail
+
+eval "$(prototypical base "$@")"
+echo "Creating prototypical npm package at ${path}" >&2
+
+echo 'Adding .gitignore' >&2
+cat <<TEXT > '.gitignore'
+/node_modules
+TEXT
+
+echo 'Appending to README.md' >&2
+cat <<MARKDOWN >> README.md
+[![Code Climate](https://codeclimate.com/github/${github_username}/${project_dir}/badges/gpa.svg)](https://codeclimate.com/github/${github_username}/${project_dir})
+MARKDOWN
+
+echo 'Adding to .travis.yml' >&2
+ruby -r 'yaml' <<'RUBY'
+travis_config = YAML.load_file('.travis.yml')
+File.write '.travis.yml', YAML.dump(
+  'sudo' => travis_config['sudo'],
+  'dist' => travis_config['dist'],
+  'language' => 'node_js',
+  'node_js' => %w[node],
+  'before_install' => travis_config['before_install'] + [
+    'npm install -g npm'
+  ]
+)
+RUBY
+
+echo 'Adding package.json' >&2
+node <<JAVASCRIPT
+function version(packageName) {
+  return require('child_process')
+    .execSync('npm show ' + packageName + ' version', {encoding: 'utf8'})
+    .trim();
+}
+
+require('fs').writeFileSync('package.json', JSON.stringify({
+  name: process.env['project_dir'],
+  version: '0.0.1',
+  description: '',
+  keywords: [],
+  homepage: 'https://github.com/${github_username}/${project_dir}',
+  bugs: 'https://github.com/${github_username}/${project_dir}/issues',
+  license: 'MIT',
+  author: '$(git config --get user.name) <$(git config --get user.email)>',
+  files: ['LICENSE', 'README.md', 'src'],
+  main: 'src/index.js',
+  bin: {
+    '${project_dir}': 'src/bin/${project_dir}.js'
+  },
+  repository: {
+    type: 'git',
+    url: 'https://github.com/${github_username}/${project_dir}'
+  },
+  scripts: {
+    prepublish: 'dist-es6',
+    test: 'eslint && jasmine'
+  },
+  dependencies: {
+    'node-promise-es6': '^' + version('node-promise-es6')
+  },
+  devDependencies: {
+    'dist-es6': '^' + version('dist-es6'),
+    'jasmine-es6': '^' + version('jasmine-es6'),
+    'eslint-defaults': '^' + version('eslint-defaults')
+  }
+}, null, 2) + '\\n');
+JAVASCRIPT
+
+echo 'Adding example implementation and test files' >&2
+mkdir -p 'src/bin' 'spec/bin'
+cat <<'JAVASCRIPT' > 'src/index.js'
+function count(total) {
+  return new Promise((resolve) => {
+    function loop(current) {
+      if (current > 0) {
+        process.stdout.write(`${current}...`);
+        setTimeout(() => loop(current - 1), 1000);
+      } else {
+        resolve();
+      }
+    }
+    loop(total);
+  });
+}
+
+export default async function() {
+  await count(3);
+  process.stdout.write('Hello World!\n');
+}
+JAVASCRIPT
+cat <<JAVASCRIPT > "src/bin/${project_dir}.js"
+import run from '${project_dir}';
+run();
+JAVASCRIPT
+cat <<JAVASCRIPT > "spec/bin/${project_dir}_spec.js"
+import {childProcess} from 'node-promise-es6';
+
+describe('${project_dir}', () => {
+  it('outputs "3...2...1...Hello World!"', async () => {
+    const {stdout} = await childProcess.exec('${project_dir}');
+    expect(stdout.trim()).toBe('3...2...1...Hello World!');
+  });
+});
+JAVASCRIPT
+
+echo 'Installing external dependencies' >&2
+npm install >&2
