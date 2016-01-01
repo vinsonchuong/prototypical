@@ -49,6 +49,7 @@ require('fs').writeFileSync('package.json', JSON.stringify({
 	start: 'serve-es6'
   },
   dependencies: {
+    'babel-polyfill': '^' + version('babel-polyfill'),
     'isomorphic-fetch': '^' + version('isomorphic-fetch'),
     'express': '^' + version('express')
   },
@@ -70,7 +71,7 @@ cat <<'HTML' > 'index.html'
 <script src="jspm_packages/config.js"></script>
 <script>
   Promise.all([
-    System.import('babel/polyfill'),
+    System.import('babel-polyfill'),
 	System.import('isomorphic-fetch')
   ])
     .then(function() {
@@ -83,8 +84,9 @@ cat <<'HTML' > 'index.html'
 HTML
 
 cat <<'JAVASCRIPT' > 'server.js'
-import fs from 'fs'
-import path from 'path'
+import 'babel-polyfill';
+import fs from 'fs';
+import path from 'path';
 import fetch from 'isomorphic-fetch';
 import express from 'express';
 
