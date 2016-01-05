@@ -10,7 +10,7 @@
 	run git status
 	[[ $output = *'Initial commit'* ]]
 
-  run cat 'LICENSE'
+	run cat 'LICENSE'
 	[[ $output = *'The MIT License'* ]]
 
 	run cat 'README.md'
@@ -28,8 +28,8 @@
 
 	[[ -f 'doc/awesome-package.md' ]]
 
-  run bats spec
-  [[ $status = 0 ]]
+	run bats spec
+	[[ $status = 0 ]]
 	[[ $output = *'ok 1 it says hello world'* ]]
 
 	popd &>/dev/null
