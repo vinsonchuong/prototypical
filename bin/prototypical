@@ -4,6 +4,7 @@ set -o nounset
 # set -o xtrace
 set -o pipefail
 
+eval "$(environment)"
 eval "$(parse-options help:h -- "$@")"
 
 if [[ $# -ne 2 ]]
@@ -13,19 +14,19 @@ fi
 
 if [[ $help ]]
 then
-	cat '/usr/share/prototypical/help/prototypical'
-else
-	recipe=$1
-	path=$(readlink -f "$2")
-
-	bin_dir=$(readlink -f "$(dirname "${BASH_SOURCE[0]}")")
-	install=${bin_dir}/../lib/${recipe}/install
-
-	if [[ -f $install ]]
-	then
-		"$install" "$path"
-	else
-		echo 'Please specify a valid recipe.' >&2
-		exit 1
-	fi
+	cat "$HELP"
+	exit
 fi
+
+recipe=$1
+path=$(realpath "$2")
+install="${LIB}/${recipe}/install"
+
+if [[ ! -f $install ]]
+then
+	echo 'Please specify a valid recipe.' >&2
+	exit 1
+fi
+
+export LIB
+"$install" "$path"

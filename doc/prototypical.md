@@ -12,6 +12,7 @@ Recipes include:
 * `rails`: A Ruby on Rails web application
 * `jspm`: A JavaScript web application powered by the `jspm` package manager
 * `npm`: An npm package for Node.js
+* `aur`: An AUR package for Arch Linux
 
 ## OPTIONS
 * -h, --help:

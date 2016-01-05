@@ -1,0 +1,74 @@
+#!/usr/bin/env bash
+set -o errexit
+set -o nounset
+# set -o xtrace
+set -o pipefail
+
+eval "$(prototypical base "$@")"
+echo "Creating prototypical AUR package at ${path}" >&2
+
+echo 'Adding to .travis.yml' >&2
+ruby -r 'yaml' <<'RUBY'
+travis_config = YAML.load_file('.travis.yml')
+File.write '.travis.yml', YAML.dump(
+  'sudo' => travis_config['sudo'],
+  'dist' => travis_config['dist'],
+  'language' => 'bash',
+  'before_install' => travis_config['before_install'],
+  'install' => [
+    'git clone https://github.com/sstephenson/bats.git',
+	'export PATH=$PWD/bin:$PWD/bats/bin:$PATH'
+  ],
+  'script' => 'bats spec'
+)
+RUBY
+
+echo 'Adding PKGBUILD' >&2
+cat <<BASH > 'PKGBUILD'
+depends=('bash-common-parse-options')
+BASH
+
+echo 'Adding example implementation and test files' >&2
+mkdir -p 'doc' 'bin' 'spec'
+cat <<MARKDOWN > "doc/${project_dir}.md"
+# ${project_dir}(1) -- prints Hello World!
+
+## SYNOPSIS
+\`${project_dir}\` \`-h\`|\`--help\`<br>
+
+## DESCRIPTION
+\`${project_dir}\` prints Hello World!
+
+## OPTIONS
+* -h, --help:
+  Show help text and exit.
+
+## COPYRIGHT
+\`${project_dir}\` is Copyright (c) $(date '+%Y') $(git config --get user.name) under The MIT License.
+MARKDOWN
+cat <<BASH > "bin/${project_dir}"
+#!/usr/bin/env bash
+set -o errexit
+set -o nounset
+# set -o xtrace
+set -o pipefail
+
+eval "\$(parse-options help:h -- "\$@")"
+
+if [[ \$help ]]
+then
+	cat '/usr/share/${project_dir}/help/${project_dir}'
+else
+	echo 'Hello World!'
+fi
+BASH
+cat <<BASH > "spec/${project_dir}.bats"
+#!/usr/bin/env bats
+
+@test 'it says hello world' {
+	run bin/${project_dir}
+	[[ \$status = 0 ]]
+	[[ \$output = *'Hello World!'* ]]
+}
+BASH
+chmod +x "bin/${project_dir}" "spec/${project_dir}.bats"

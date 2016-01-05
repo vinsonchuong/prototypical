@@ -4,9 +4,8 @@ set -o nounset
 # set -o xtrace
 set -o pipefail
 
-lib=$(dirname "$(dirname "$(readlink -f "$0")")")
 path=$1
-source "${lib}/versions"
+source "${LIB}/versions"
 
 project_dir=$(basename "$path")
 project_snake=$(echo "$project_dir" | perl -ne 'print join _, split /\W+/')
@@ -77,9 +76,9 @@ puts YAML.dump(
 RUBY
 
 cat <<BASH
-$(cat "${lib}/versions")
+$(cat "${LIB}/versions")
 export path=$(printf '%q' "$path")
-export lib=$(printf '%q' "$lib")
+export lib=$(printf '%q' "$LIB")
 
 export project_dir=$(printf '%q' "$project_dir")
 export project_snake=$(printf '%q' "$project_snake")
