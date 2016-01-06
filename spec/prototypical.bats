@@ -13,6 +13,7 @@ teardown() {
 	chmod +x "${recipe_dir}/install"
 
 	run prototypical 'recipe' "${BATS_TMPDIR}/awesome_blog"
+	echo "$output"
 	[[ $status = 0 ]]
 	[[ $output = "Recipe: ${BATS_TMPDIR}/awesome_blog" ]]
 }
