@@ -1,7 +1,8 @@
 #!/usr/bin/env bats
 
 @test 'it can bootstrap a basic base app' {
-	run prototypical base '/tmp/awesome_blog'
+	prototypical base '/tmp/awesome_blog'
+	false
 	echo "$output"
 	[[ $status = 0 ]]
 	[[ $output = *'path=/tmp/awesome_blog'* ]]
