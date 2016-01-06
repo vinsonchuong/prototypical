@@ -22,6 +22,7 @@ install:
   - nvm install node
   - npm install -g npm
   - git clone https://github.com/sstephenson/bats
+  - git clone https://github.com/vinsonchuong/bash-common-parse-options
   - git clone https://github.com/vinsonchuong/bash-common-environment
   - export PATH=$PWD/bin:$PWD/bats/bin:$PWD/bash-common-parse-options/bin:$PWD/bash-common-environment/bin:$PATH
 script:
