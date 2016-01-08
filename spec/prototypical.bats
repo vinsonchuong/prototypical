@@ -12,9 +12,7 @@ teardown() {
 	EOF
 	chmod +x "${recipe_dir}/install"
 
-	prototypical 'recipe' "${BATS_TMPDIR}/awesome_blog"
-	exit
-	echo "$output"
+	run prototypical 'recipe' "${BATS_TMPDIR}/awesome_blog"
 	[[ $status = 0 ]]
 	[[ $output = "Recipe: ${BATS_TMPDIR}/awesome_blog" ]]
 }
