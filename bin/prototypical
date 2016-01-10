@@ -19,7 +19,7 @@ then
 fi
 
 recipe=$1
-path=$(readlink -f "$2")
+path=$(realpath -s "$2")
 install="${LIB}/${recipe}/install"
 
 if [[ ! -f $install ]]
