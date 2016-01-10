@@ -26,5 +26,4 @@ install:
   - git clone https://github.com/vinsonchuong/bash-common-environment
   - export PATH=$PWD/bin:$PWD/bats/bin:$PWD/bash-common-parse-options/bin:$PWD/bash-common-environment/bin:$PATH
 script:
-  - prototypical base /tmp/test-project
   - bats spec
