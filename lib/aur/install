@@ -8,8 +8,21 @@ eval "$(prototypical base "$@")"
 echo "Creating prototypical AUR package at ${path}" >&2
 
 echo 'Adding to README.md' >&2
-README=$(cat 'README.md')
-cat <(echo "# ${project_dir}") <(echo "$README" | tail -n +2) > 'README.md'
+README=$(cat 'README.md' | tail -n +2)
+cat <(echo "# ${project_dir}") <(echo "$README") - > 'README.md' <<MARKDOWN
+
+Prints Hello World!
+
+* [docs](doc/${project_dir}.md)
+* [code](bin/${project_dir})
+
+## Installing
+If the target machine is running [Arch Linux](https://www.archlinux.org/),
+an [AUR package](https://aur.archlinux.org/packages/${project_dir}/)
+is available.
+
+Otherwise, the script in the `bin` directory can be executed directly.
+MARKDOWN
 
 echo 'Adding to .travis.yml' >&2
 ruby -r 'yaml' <<'RUBY'
@@ -17,6 +30,11 @@ travis_config = YAML.load_file('.travis.yml')
 File.write '.travis.yml', YAML.dump(
   'sudo' => travis_config['sudo'],
   'dist' => travis_config['dist'],
+  'addons' => {
+    'apt' => {
+      'packages' => %w[realpath]
+    }
+  },
   'language' => 'bash',
   'before_install' => travis_config['before_install'],
   'install' => [
@@ -29,7 +47,7 @@ RUBY
 
 echo 'Adding PKGBUILD' >&2
 cat <<BASH > 'PKGBUILD'
-depends=('bash-common-parse-options')
+depends=('bash-common-environment' 'bash-common-parse-options')
 BASH
 
 echo 'Adding example implementation and test files' >&2
@@ -57,14 +75,16 @@ set -o nounset
 # set -o xtrace
 set -o pipefail
 
+eval "\$(environment)"
 eval "\$(parse-options help:h -- "\$@")"
 
 if [[ \$help ]]
 then
-	cat '/usr/share/${project_dir}/help/${project_dir}'
-else
-	echo 'Hello World!'
+	cat "\$HELP"
+	exit
 fi
+
+echo 'Hello World!'
 BASH
 cat <<BASH > "spec/${project_dir}.bats"
 #!/usr/bin/env bats

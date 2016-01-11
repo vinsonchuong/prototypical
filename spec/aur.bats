@@ -16,19 +16,22 @@
 	run cat 'README.md'
 	[[ $output = *'# awesome-package'* ]]
 	[[ $output = *'Build Status'*'travis-ci.org/'*'/awesome-package'* ]]
+	[[ $output = *'[docs](doc/awesome-package.md)'* ]]
+	[[ $output = *'https://aur.archlinux.org/packages/awesome-package/'* ]]
 
 	run cat '.travis.yml'
 	[[ $output = *'language: bash'* ]]
+	[[ $output = *'- realpath'* ]]
 	[[ $output = *'Xvfb'* ]]
 	[[ $output = *'sstephenson/bats'* ]]
 	[[ $output = *'bats spec'* ]]
 	
 	run cat 'PKGBUILD'
-	[[ $output = *"depends=('bash-common-parse-options')"* ]]
+	[[ $output = *"depends=('bash-common-environment' 'bash-common-parse-options')"* ]]
 
 	[[ -f 'doc/awesome-package.md' ]]
 
-	run bats spec
+	PATH="$PWD/bin:$PATH" run bats spec
 	[[ $status = 0 ]]
 	[[ $output = *'ok 1 it says hello world'* ]]
 
