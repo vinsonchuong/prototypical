@@ -7,6 +7,10 @@ set -o pipefail
 eval "$(prototypical base "$@")"
 echo "Creating prototypical AUR package at ${path}" >&2
 
+echo 'Adding to README.md' >&2
+README=$(cat 'README.md')
+cat <(echo "# ${project_dir}") <(echo "$README" | tail -n +2) > 'README.md'
+
 echo 'Adding to .travis.yml' >&2
 ruby -r 'yaml' <<'RUBY'
 travis_config = YAML.load_file('.travis.yml')

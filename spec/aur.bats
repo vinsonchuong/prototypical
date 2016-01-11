@@ -14,7 +14,7 @@
 	[[ $output = *'The MIT License'* ]]
 
 	run cat 'README.md'
-	[[ $output = *'# Awesome Package'* ]]
+	[[ $output = *'# awesome-package'* ]]
 	[[ $output = *'Build Status'*'travis-ci.org/'*'/awesome-package'* ]]
 
 	run cat '.travis.yml'
