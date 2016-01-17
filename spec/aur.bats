@@ -23,7 +23,7 @@
 	[[ $output = *'language: bash'* ]]
 	[[ $output = *'- realpath'* ]]
 	[[ $output = *'Xvfb'* ]]
-	[[ $output = *'sstephenson/bats'* ]]
+	[[ $output = *'bash-common-bundle-dependencies'* ]]
 	[[ $output = *'bats spec'* ]]
 	
 	run cat 'PKGBUILD'
