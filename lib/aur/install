@@ -38,8 +38,8 @@ File.write '.travis.yml', YAML.dump(
   'language' => 'bash',
   'before_install' => travis_config['before_install'],
   'install' => [
-    'git clone https://github.com/sstephenson/bats.git',
-	'export PATH=$PWD/bin:$PWD/bats/bin:$PATH'
+    'bash <(curl -L https://github.com/vinsonchuong/bash-common-bundle-dependencies/raw/master/bin/bundle-dependencies)',
+    'export PATH=$PWD/bin:$PWD/packages/bin:$PATH'
   ],
   'script' => 'bats spec'
 )
