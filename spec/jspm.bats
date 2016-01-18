@@ -10,7 +10,7 @@
 	run git status
 	[[ $output = *'Initial commit'* ]]
 
-  run cat 'LICENSE'
+	run cat 'LICENSE'
 	[[ $output = *'The MIT License'* ]]
 
 	run cat 'README.md'
@@ -34,14 +34,14 @@
 	echo 'add(`Array#includes: ${[1].includes(1)}`);' >> 'index.js'
 
 	npm start &> server &
-  while true
-  do
-    sleep 1
-    if [[ $(cat server) = *'8080'* ]]
-    then
-      break
-    fi
-  done
+	while true
+	do
+		sleep 1
+		if [[ $(cat server) = *'8080'* ]]
+		then
+			break
+		fi
+	done
 
 	run cat 'server'
 	[[ $output = *'Array#includes: true'* ]]

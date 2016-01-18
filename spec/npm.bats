@@ -10,7 +10,7 @@
 	run git status
 	[[ $output = *'Initial commit'* ]]
 
-  run cat 'LICENSE'
+	run cat 'LICENSE'
 	[[ $output = *'The MIT License'* ]]
 
 	run cat 'README.md'
@@ -32,8 +32,8 @@
 	[[ $output = *'"license": "MIT"'* ]]
 	[[ $output = *'"prepublish": "dist-es6"'* ]]
 
-  run npm test
-  [[ $status = 0 ]]
+	run npm test
+	[[ $status = 0 ]]
 	[[ $output = *'1 spec, 0 failures'* ]]
 
 	popd &>/dev/null

@@ -14,7 +14,7 @@ setup() {
 	run git status
 	[[ $output = *'Initial commit'* ]]
 
-  run cat 'LICENSE'
+	run cat 'LICENSE'
 	[[ $output = *'The MIT License'* ]]
 
 	run cat 'README.md'
