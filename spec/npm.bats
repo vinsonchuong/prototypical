@@ -14,9 +14,10 @@
 	[[ $output = *'The MIT License'* ]]
 
 	run cat 'README.md'
-	[[ $output = *'# Awesome Package'* ]]
+	[[ $output = *'# awesome-package'* ]]
 	[[ $output = *'Build Status'*'travis-ci.org/'*'/awesome-package'* ]]
 	[[ $output = *'Code Climate'*'codeclimate.com/github/'*'/awesome-package'* ]]
+	[[ $output = *'## Usage'* ]]
 
 	run cat '.gitignore'
 	[[ $output = *'/node_modules'* ]]

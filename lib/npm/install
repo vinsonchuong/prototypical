@@ -12,9 +12,37 @@ cat <<TEXT > '.gitignore'
 /node_modules
 TEXT
 
-echo 'Appending to README.md' >&2
-cat <<MARKDOWN >> README.md
+echo 'Adding to README.md' >&2
+README=$(cat 'README.md' | tail -n +2)
+cat <(echo "# ${project_dir}") <(echo "$README") - > 'README.md' <<MARKDOWN
 [![Code Climate](https://codeclimate.com/github/${github_username}/${project_dir}/badges/gpa.svg)](https://codeclimate.com/github/${github_username}/${project_dir})
+
+Prints Hello World!
+
+## Installing
+\`${project_dir}\` is available as an
+[npm package](https://www.npmjs.com/package/${project_dir}).
+
+## Usage
+From the command line, run:
+\`\`\`bash
+${project_dir}
+\`\`\`
+
+## Development
+### Getting Started
+The application requires the following external dependencies:
+* Node.js
+
+The rest of the dependencies are handled through:
+\`\`\`bash
+npm install
+\`\`\`
+
+Run tests with:
+\`\`\`bash
+npm test
+\`\`\`
 MARKDOWN
 
 echo 'Adding to .travis.yml' >&2
