@@ -3,4 +3,5 @@ optdepends=('hub')
 checkdepends=('bats-git' 'git')
 
 check() {
+	true
 }
