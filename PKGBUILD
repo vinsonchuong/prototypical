@@ -2,4 +2,5 @@ depends=('bash-common-environment' 'bash-common-parse-options' 'postgresql' 'per
 optdepends=('hub')
 checkdepends=('bats-git' 'git')
 
-check() {}
+check() {
+}
