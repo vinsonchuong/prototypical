@@ -30,11 +30,6 @@ travis_config = YAML.load_file('.travis.yml')
 File.write '.travis.yml', YAML.dump(
   'sudo' => travis_config['sudo'],
   'dist' => travis_config['dist'],
-  'addons' => {
-    'apt' => {
-      'packages' => %w[realpath]
-    }
-  },
   'language' => 'bash',
   'before_install' => travis_config['before_install'],
   'install' => [
