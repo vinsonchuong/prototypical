@@ -21,6 +21,7 @@
 
 	run cat '.travis.yml'
 	[[ $output = *'language: bash'* ]]
+	[[ $output = *'- realpath'* ]]
 	[[ $output = *'Xvfb'* ]]
 	[[ $output = *'bash-common-bundle-dependencies'* ]]
 	[[ $output = *'bats spec'* ]]
