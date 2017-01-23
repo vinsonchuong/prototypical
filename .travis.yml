@@ -24,4 +24,4 @@ install:
   - bash <(curl -L https://github.com/vinsonchuong/bash-common-bundle-dependencies/raw/master/bin/bundle-dependencies)
   - export PATH=$PWD/bin:$PWD/packages/bin:$PATH
 script:
-  - bats spec
+  - bats test
