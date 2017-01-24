@@ -14,10 +14,12 @@ cat <<-RUBY > 'Gemfile'
 	gem 'rails', '~> ${RAILS_VERSION}'
 	RUBY
 bundle install --jobs 4 --retry 3
+
+export README_BASE=$(cat 'README.md')
 bundle exec rails new . \
 	--template="${lib}/rails/template.rb" \
 	--skip-bundle \
 	--database='postgresql' \
 	--skip-turbolinks \
-	--skip-test-unit \
+	--skip-test \
 	--force

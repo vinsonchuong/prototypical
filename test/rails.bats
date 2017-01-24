@@ -29,13 +29,14 @@ setup() {
 	[[ $output = *'rake db:test:prepare'* ]]
 
 	run bin/rails generate scaffold article title:string
-	run bin/rake db:migrate
+	rm -rf 'spec/controllers'
+	run bin/rails db:migrate
 	run bin/rails runner 'Article.create(title: "First Article")'
 	run bin/rails runner 'puts Article.first.title'
 	[[ $output = *'First Article'* ]]
 
 	run bin/rails server --daemon
-	[[ $(curl 'http://localhost:3000/articles' 2>/dev/null) = *'Listing Articles'* ]]
+	[[ $(curl 'http://localhost:3000/articles' 2>/dev/null) = *'First Article'* ]]
 
 	mkdir '/tmp/awesome_blog/spec/features'
 	cat <<-'RUBY' > '/tmp/awesome_blog/spec/features/articles_spec.rb'
@@ -55,7 +56,7 @@ setup() {
 	RUBY
 
 	run bin/rspec
-	[[ $output = *'32 examples, 0 failures, 17 pending'* ]]
+	[[ $output = *' 0 failures'* ]]
 
 	run bin/spring status
 	[[ $output = *'Spring is running:'* ]]

@@ -6,8 +6,13 @@ def bundle(command)
   end
 end
 
-remove_file 'README.rdoc'
-append_to_file 'README.md', <<MARKDOWN
+def move_file(old_file, new_file)
+  copy_file old_file, new_file
+  remove_file old_file
+end
+
+file 'README.md', <<MARKDOWN
+#{ENV['README_BASE'].chomp}
 [![Dependency Status](https://gemnasium.com/#{ENV['github_username']}/#{ENV['project_dir']}.svg)](https://gemnasium.com/#{ENV['github_username']}/#{ENV['project_dir']})
 [![Code Climate](https://codeclimate.com/github/#{ENV['github_username']}/#{ENV['project_dir']}/badges/gpa.svg)](https://codeclimate.com/github/#{ENV['github_username']}/#{ENV['project_dir']})
 
@@ -44,18 +49,19 @@ file '.travis.yml', YAML.dump(
   'cache' => 'bundler'
 )
 
-
 file 'Gemfile', <<-RUBY
 source 'https://rubygems.org'
 
 ruby '#{ENV['RUBY_VERSION']}'
-gem 'rails', '#{ENV['RAILS_VERSION']}'
+gem 'rails', '~> #{ENV['RAILS_VERSION']}'
 
 gem 'pg'
 gem 'puma'
 
 gem 'bcrypt'
 gem 'jbuilder'
+
+gem 'tzinfo-data', platforms: %i(mingw mswin x64_mingw jruby)
 
 gem 'sass-rails'
 gem 'jquery-rails'
@@ -66,12 +72,14 @@ group :development do
   gem 'spring-watcher-listen'
   gem 'spring-commands-rspec'
 
+  gem 'listen'
+
   gem 'pry-rails'
   gem 'web-console'
 end
 
 group :development, :test do
-  gem 'byebug'
+  gem 'byebug', platform: :mri
   gem 'pry-byebug'
 
   gem 'rspec-rails'
@@ -93,13 +101,14 @@ require 'fileutils'
 
 Dir.chdir File.expand_path('../../',  __FILE__) do
   puts '== Installing Dependencies =='
-  system 'gem install bundler --conservative'
-  system 'bundle check || bundle install --jobs 4 --retry 3'
+  system! 'gem install bundler --conservative'
+  system! 'bundle check || bundle install --jobs 4 --retry 3'
 
-  puts
+  puts "\n== Preparing Database =="
+  system! 'bin/rails db:setup db:test:prepare'
 
-  puts '== Preparing Database =='
-  system 'bin/rake db:setup db:test:prepare'
+  puts "\n== Restarting application server =="
+  system! 'bin/rails restart'
 end
 RUBY
 
@@ -115,8 +124,8 @@ generate 'rspec:install'
 insert_into_file 'spec/rails_helper.rb', <<-RUBY, after: /^# Add additional.*\n/
 require 'capybara/rails'
 require 'capybara/poltergeist'
-# Capybara.default_driver = :poltergeist
-Capybara.default_driver = :selenium
+Capybara.default_driver = :poltergeist
+# Capybara.default_driver = :selenium
 RUBY
 
 comment_lines 'spec/rails_helper.rb', /use_transactional_fixtures/
